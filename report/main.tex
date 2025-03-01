@@ -7,6 +7,7 @@
 \usepackage{color} 
 \usepackage{setspace} 
 \usepackage{amsmath}
+\usepackage[mathscr]{eucal}
 \usepackage{hyperref}
 \usepackage{pdfpages}
 \usepackage{biblatex}
@@ -44,7 +45,71 @@
 
 %\listoffigures % ToC for figures
 
-\include{src/introduction.tex}
+\chapter{Introduction}
+
+\chapter{Theoretical answers}
+
+\section{Step 1}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{circuit.png}
+    \caption{Equivalent electric circuit of an antenna in RX (left) and TX (right)}
+    \label{fig:equivalent_electrical_circuit}
+\end{figure}
+
+Fig \ref{fig:equivalent_electrical_circuit} shows the equivalent electrical circuit at RX and TX where $\underline{V}_{oc}$ is the induced voltage, $\underline{V}_{RX}$ the voltage at the output of the RX antenna, $\underline{V}_{TX}$ at the input of the TX antenna and $\underline{I}_{a}$ the current entering the TX antenna.\\
+
+As both transmitting and receiving antenna are vertical $\lambda/2$ dipoles, their equivalent heights can be analytically computed:
+
+\begin{align*}
+    \vec{h}_e (\theta, \phi) = \frac{\lambda}{\pi} \frac{\cos(\frac{1}{2}\cos \theta)}{\sin ^2 \theta}\vec{1_z}\\
+    \vec{h}_{e\perp} (\theta, \phi) = -\frac{\lambda}{\pi} \frac{\cos(\frac{\pi}{2}\cos \theta)}{\sin \theta}\vec{1_\theta}
+\end{align*}
+
+The transverse part of the equivalent height allows to give an expression for the emitted electric field.
+
+\begin{align*}
+    \underline{\vec{E}} = j\frac{Z_0\underline{I}_a}{2\pi}\frac{\cos(\frac{\pi}{2}\cos \theta)}{\sin \theta}\frac{e^{-j\beta r}}{r}\vec{1_\theta}
+\end{align*}
+
+To make the transmission parameters appear in the electric field expression, $\beta$ and $\underline{I}_a$ must be replaced using:
+
+\begin{align*}
+    \beta = \frac{2\pi f_c}{c}\\
+    \underline{V}_{TX} = (Z_a + Z_S) \underline{I}_a
+\end{align*}
+
+Wich yields
+
+\begin{align*}
+    \underline{\vec{E}} = j\frac{Z_0\underline{V}_{TX}}{2\pi (Z_a + Z_S)}\frac{\cos(\frac{\pi}{2}\cos \theta)}{\sin \theta}\frac{e^{-j \frac{2\pi f_c r}{c}}}{r}\vec{1_\theta}\\
+    \left . \underline{\vec{E}}\right\vert_{\theta = \pi/2} = -j\frac{Z_0\underline{V}_{TX}}{2\pi (Z_a + Z_S)}\frac{e^{-j \frac{2\pi f_c r}{c}}}{r}\vec{1_z}
+\end{align*}
+
+Where $\theta$ has been chosen equal to $\pi /2$ in order to study only the electric filed in the horizontal place. At the receiving side, the incoming electric filed $\underline{\vec{E}}_i$ is simply equal to the transmitted electric field after it traveled over a distance $r = c\tau$ where $\tau$ is the propagation delay. This is of course in the case of line of sight (LOS) communication with no interfering object (IO) between TX and RX.
+
+\begin{align*}
+    \underline{\vec{E}}_i = -j\frac{Z_0 c \underline{V}_{TX}}{2\pi (Z_a + Z_S)}\frac{e^{-j 2\pi f_c \tau}}{\tau}\vec{1_z}
+\end{align*}
+
+The voltage at the output of the antenna $\underline{V}_{RX}$ can then be deduced using:
+
+\begin{align*}
+    \underline{V}_{RX} = \frac{Z_L}{Z_a + Z_L} \underline{V}_{oc}\\
+    \underline{V}_{oc} = -\left . \vec{h}_{e\perp}(\theta, \phi)\right\vert_{\theta = \pi/2} \cdot \underline{\vec{E}}_i
+\end{align*}
+
+Resulting in:
+
+\begin{align*}
+    \underline{V}_{oc} &= \frac{\lambda}{\pi} \cdot \underline{E}_i\\
+    &= -j\frac{Z_0 c \lambda \underline{V}_{TX}}{2\pi^2 (Z_a + Z_S)}\frac{e^{-j 2\pi f_c \tau}}{\tau}\\
+    \underline{V}_{RX} &= -j\frac{Z_0 Z_L c \lambda \underline{V}_{TX}}{2\pi^2 (Z_a + Z_S) (Z_a+Z_S)}\frac{e^{-j 2\pi f_c \tau}}{\tau}
+\end{align*}
+
+\huge Is the actual formula correct?
+
 
 %\printglossary
 
