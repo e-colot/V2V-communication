@@ -108,7 +108,36 @@ Resulting in:
     \underline{V}_{RX} &= -j\frac{Z_0 Z_L c \lambda \underline{V}_{TX}}{2\pi^2 (Z_a + Z_S) (Z_a+Z_S)}\frac{e^{-j 2\pi f_c \tau}}{\tau}
 \end{align*}
 
-\huge Is the actual formula correct?
+\section{Step 2}
+
+Assuming the communication takes place via a LOS ray only, the channel impulse response $h(\tau)$ is defined as follows:
+
+\begin{align*}
+    h(\tau) = \frac{\alpha_1 e^{-j2\pi f_c \tau_1}}{d_1} \delta(\tau - \tau_1)
+\end{align*}
+
+Where $\tau_1$ is the propagation delay and $d_1$ the propagation distance of the direct ray. $\alpha_1$ (which might be complex) takes into account a phase change or attenuation due for example to reflections whereas the imaginary exponential next to it corresponds to the phase change due to the propagation delay. In the case of LOS transmission, we have $\alpha_1 = 1$.\\
+The transfer function $H(f)$ of the channel is found by taking the Fourier transform of $h(\tau)$
+
+\begin{align*}
+    H(f) &= \int_{-\infty}^{\infty} h(\tau) e^{-j2\pi f \tau} d\tau\\
+    &= \frac{e^{-j2\pi f_c \tau_1}}{d_1}e^{-j2\pi f \tau_1}
+\end{align*}
+
+As we consider a single ray, the narrowband model of the channel $h_{NB}$ (representing the case where the receiver perceives the sum of all propagation path) is simply found by removing the Dirac pulse from $h(\tau)$
+
+\begin{align*}
+    h_{NB} = \frac{e^{-j2\pi f_c \tau_1}}{d_1}
+\end{align*}
+
+
+
+
+
+
+
+
+
 
 
 %\printglossary
