@@ -7,6 +7,8 @@
 \usepackage{color} 
 \usepackage{setspace} 
 \usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage{bm}
 \usepackage[mathscr]{eucal}
 \usepackage{hyperref}
 \usepackage{pdfpages}
@@ -34,9 +36,9 @@
 	title={V2V communication project},
     studies={M1-IRELE},
     course ={ELEC-H415 Communication Channels},
-    author={\textit{Authors :} \\ Colot Emmeran },
+    author={\textit{Author :} \\ Colot Emmeran },
     date={\textbf{Academic year :} \\ 2024 - 2025},
-    teacher={\textit{Professor : } \\ Horlin François},
+    teacher={\textit{Professor : } \\ De Doncker Philippe},
     logo={pic/official_logos/logos.jpg},
     manyAuthor
 	}
@@ -47,6 +49,12 @@
 
 \chapter{Introduction}
 
+\begin{center}
+    
+    \Huge TODO
+    \normalsize
+    
+\end{center}
 \chapter{Theoretical answers}
 
 \section{Step 1}
@@ -130,12 +138,49 @@ As we consider a single ray, the narrowband model of the channel $h_{NB}$ (repre
     h_{NB} = \frac{e^{-j2\pi f_c \tau_1}}{d_1}
 \end{align*}
 
+The ratio between the received power $P_{RX}$ and the transmitted power $P_{TX}$ is found with:
 
+\begin{align}
+    \frac{P_{RX}}{P_{TX}} &= \frac{\left| h(\tau) \right|^2}{2} \nonumber\\
+    &= \frac{1}{d_1^2}
+    \label{eq:power_approx}
+\end{align}
 
+This result can be compared with the Friis formula, given by:
 
+\begin{align}
+    P_{RX}(d) = P_{TX} G_{TX}(\theta_{TX}, \phi_{TX})G_{RX}(\theta_{RX}, \phi_{RX})\left(\frac{\lambda}{4\pi d}\right)^2
+    \label{eq:friis_formula}
+\end{align}
 
+The reason for the big difference between the two formulas can be easily explained: in eq \ref{eq:power_approx}, the powers $P_{RX}$ and $P_{TX}$ are the ones of the wave without taking the antennas into account. To correct it:
 
+\begin{align}
+    \frac{\left|\bm{\vec{\mathscr{S}}}_{RX}\right|}{\left|\bm{\vec{\mathscr{S}}}_{TX}\right|} = \frac{1}{d_1^2}
+    \label{eq:poynting}
+\end{align}
 
+To compare the received and the injected power, the Poynting vectors should be replaced by
+
+\begin{align*}
+    \left|\bm{\vec{\mathscr{S}}}_{TX}\right| = G_{TX} P_{TX}\\
+    \left|\bm{\vec{\mathscr{S}}}_{RX}\right| A_{eRX} = P_{RX}\\
+    \text{where} \quad \quad A_{eRX} = G_{RX}\left(\frac{\lambda}{4\pi}\right)^2
+\end{align*}
+
+When placed back in eq \ref{eq:poynting}, the expression matches the Friis formula.
+
+\begin{align}
+    \frac{P_{RX}}{P_{TX}} = G_{TX} G_{RX} \left(\frac{\lambda}{4\pi d_1}\right)^2
+\end{align}
+
+Two deductions can be made of this result: 
+\begin{itemize}
+    \item The power loss on the channel depends on the square of the distance between the emitter and the receiver. It implies that doubling the range of an antenna would a multiplication of the transmitting power by a factor 4.
+    \item A more surprising result is the wavelength squared appearing at the numerator. It shows that there is always a compromise between data rate and power consumption as a larger wavelength will indeed be less attenuated but the maximal data rate will then be lowered in order for the bandwidth of the transmitted signal to be much lower than the carrier frequency.
+\end{itemize}
+
+\section{Step 3}
 
 
 
