@@ -35,13 +35,14 @@ function visualize(cfg, rays)
     while y_pos < road_length/2
         % Random building dimensions
         building_width = min_building_width + (max_building_width - min_building_width) * rand;
-        building_height = min_building_height + (max_building_height - min_building_height) * rand;
+        building_heightL = min_building_height + (max_building_height - min_building_height) * rand;
+        building_heightR = min_building_height + (max_building_height - min_building_height) * rand;
 
         % Left-side buildings
-        drawBuilding(-road_width/2 - avg_building_depth, y_pos + building_width/2, building_width, avg_building_depth, building_height, building_transparency);
+        drawBuilding(-road_width/2 - avg_building_depth, y_pos + building_width/2, building_width, avg_building_depth, building_heightL, building_transparency);
 
         % Right-side buildings
-        drawBuilding(road_width/2, y_pos + building_width/2, building_width, avg_building_depth, building_height, building_transparency);
+        drawBuilding(road_width/2, y_pos + building_width/2, building_width, avg_building_depth, building_heightR, building_transparency);
 
         % Update y_pos for next building
         y_pos = y_pos + building_width;

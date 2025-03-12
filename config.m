@@ -27,8 +27,8 @@ function cfg = config()
 
     cfg.graphical_params = struct();
     cfg.graphical_params.avg_building_depth = 30; % m depth of buildings
-    cfg.graphical_params.min_building_width = 20; % m minimum width of buildings
-    cfg.graphical_params.max_building_width = 40; % m maximum width of buildings
+    cfg.graphical_params.min_building_width = 15; % m minimum width of buildings
+    cfg.graphical_params.max_building_width = 30; % m maximum width of buildings
     cfg.graphical_params.min_building_height = 10; % m minimum height of buildings
     cfg.graphical_params.max_building_height = 30; % m maximum height of buildings
     cfg.graphical_params.building_transparency = 0.3; % transparency of buildings
