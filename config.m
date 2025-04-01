@@ -25,6 +25,8 @@ function cfg = config()
     cfg.environment_params.distance = 400; % m distance between the cars
     cfg.environment_params.road_length = cfg.environment_params.distance*5/4; % m length of the road
 
+    cfg.environment_params.perpendicular_road_length = cfg.environment_params.road_length; % m length of the perpendicular road
+
     cfg.graphical_params = struct();
     cfg.graphical_params.avg_building_depth = 30; % m depth of buildings
     cfg.graphical_params.min_building_width = 15; % m minimum width of buildings
