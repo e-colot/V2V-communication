@@ -41,4 +41,6 @@ function cfg = config()
     
     cfg.bounce_limit = 3; % bounce limit
 
+    cfg.obstacles = createObstacles(cfg); % create obstacles
+
 end
