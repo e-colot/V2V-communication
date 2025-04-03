@@ -110,20 +110,19 @@ function visualize(cfg, rays)
     scatter3(cfg.RX_pos(1), cfg.RX_pos(2), cfg.graphical_params.car_size, 200, 'b', 'filled');   % Blue car (left lane)
 
     %% Draw Rays
-    colormap(jet); % Set the colormap to 'jet'
-    colorbar; % Display the colorbar
 
-    for i = 1:length(rays)
-        ray = rays(i);
-        if ray.distance == -1
-            continue;
+    for i = 1:size(rays, 3)
+        ray = rays(:, :, i);
+        index = 1;
+        while (index < (cfg.bounce_limit+2) && norm(ray(index+1, :)))
+            % draw a line between ray(index, :) and ray(index+1, :)
+            line_x = [ray(index, 1), ray(index+1, 1)];
+            line_y = [ray(index, 2), ray(index+1, 2)];
+            z_pos = [cfg.graphical_params.car_size, cfg.graphical_params.car_size]; % Set z position to car size
+            % Draw the line in red
+            plot3(line_x, line_y, z_pos, 'r', 'LineWidth', 2); % Red line
+            index = index + 1;
         end
-        % Normalize the distance to a value between 0 and 1 for color mapping
-        normalized_distance = (ray.distance - min([rays.distance])) / (max([rays.distance]) - min([rays.distance]));
-        % Map the normalized distance to a color using the colormap
-        ray_color = jet(256);
-        color_idx = round(normalized_distance * 255) + 1;
-        plot3(ray.points(1, :), ray.points(2, :), cfg.graphical_params.car_size*ones(1, length(ray.points)), 'Color', ray_color(color_idx, :), 'LineWidth', 1);
     end
 
     %% Camera Settings

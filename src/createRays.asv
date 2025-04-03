@@ -3,6 +3,8 @@ function rays = createRays(cfg)
     raysCnt = 1;
     obstID = zeros(1, cfg.bounce_limit);
 
+    validObstID = zeros(50, cfg.bounce_limit);
+
     while(norm(obstID - ones(1, cfg.bounce_limit) * length(cfg.obstacles)) ~= 0)
         % create the ray path (virtual antenna to virtual antenna)
         ray = zeros(cfg.bounce_limit+2, 2);
@@ -18,7 +20,7 @@ function rays = createRays(cfg)
         rayToCheck = instersectRay(obst, ray, size(obst, 3));
         if ~isnan(rayToCheck(1))
             rays(:,:,raysCnt) = rayToCheck;
-            validObstID(raysCnt,:) = obstID;
+            validObstID(raysCnt,)
             raysCnt = raysCnt + 1;
         end
 
@@ -68,7 +70,7 @@ function ray = instersectRay(obstacles, ray, index)
         return;
     end
     % if the ray intersects with the obstacle
-    ray(index, :) = coord;
+    ray(index+1, :) = coord;
 
     ray = instersectRay(obstacles, ray, index-1);
     return

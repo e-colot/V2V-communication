@@ -1,7 +1,6 @@
 clear; close all; clc;
 
-cfg = config();
+cfg = config(); 
+rays = createRays(cfg);
 
-
-
-
+visualize(cfg, rays);

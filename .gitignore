@@ -41,3 +41,4 @@
 
 # Ignore directories created by LaTeX editors
 .texpadtmp
+test.m
