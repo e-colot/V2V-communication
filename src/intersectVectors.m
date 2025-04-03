@@ -8,13 +8,13 @@ function coord = intersectVectors(v1, v2)
     coord = v2(1,:) + perpDRatio*d2;
     projd1 = dot(coord-v1(1,:), d1);
     projd2 = dot(coord-v2(1,:), d2);
-    if (projd1 < 0) || (projd1 > norm(v1(2,:) - v1(1,:))) || (projd2 < 0) || (projd2 > norm(v2(2,:) - v2(1,:)))
+    if (projd1 < 1e-3) || (projd1 > norm(v1(2,:) - v1(1,:)) - 1e-3) || (projd2 < 1e-3) || (projd2 > norm(v2(2,:) - v2(1,:)) - 1e-3)
         % The intersection point is outside the segments
         coord = [NaN, NaN];
     end
 
     % VERIFICATION
-    % figure;
+    % clf;
     % plot(v1(:,1), v1(:,2), 'r', 'LineWidth', 2); % Plot the first vector in red
     % hold on;
     % plot(v2(:,1), v2(:,2), 'b', 'LineWidth', 2); % Plot the second vector in blue

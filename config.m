@@ -22,8 +22,7 @@ function cfg = config()
     cfg.environment_params.bld_rel_perm = 4; % relative permittivity of buildings
     cfg.environment_params.local_area_len = 5; % m length of the local area
     cfg.environment_params.road_width = 20; 
-    cfg.environment_params.distance = 400; % m distance between the cars
-    cfg.environment_params.road_length = cfg.environment_params.distance*5/4; % m length of the road
+    cfg.environment_params.road_length = 500; % m length of the road
 
     cfg.environment_params.perpendicular_road_length = cfg.environment_params.road_length; % m length of the perpendicular road
 
@@ -36,8 +35,8 @@ function cfg = config()
     cfg.graphical_params.building_transparency = 0.3; % transparency of buildings
     cfg.graphical_params.car_size = 5; % size of the cars
 
-    cfg.TX_pos = [-cfg.environment_params.road_width/4; -cfg.environment_params.distance/2];
-    cfg.RX_pos = [-cfg.environment_params.road_width/4; cfg.environment_params.distance/2];
+    cfg.TX_pos = [-cfg.environment_params.road_width/4; -50];
+    cfg.RX_pos = [50; -cfg.environment_params.road_width/4];
     
     cfg.bounce_limit = 3; % bounce limit
 

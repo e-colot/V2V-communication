@@ -1,4 +1,4 @@
-function rays = createRays(cfg)
+function finalRays = createRays(cfg)
     rays = [];
     raysCnt = 1;
     obstID = zeros(1, cfg.bounce_limit);
@@ -54,6 +54,35 @@ function rays = createRays(cfg)
 
     end
 
+    % remove rays that intersect obstacles
+    finalRays = [];
+    finalRaysCnt = 1;
+    for i = 1:size(rays, 3)
+        % for each ray
+        ray = rays(:,:,i);
+        valid = 1;
+        for j = 1:size(ray, 1)-1
+            % for each segment of the ray
+            segment = [ray(j, :); ray(j+1, :)];
+            if ~norm(ray(j+1, :))
+                break;
+            end
+            for k = 1:size(cfg.obstacles, 3)
+                % for each obstacle
+                obst = cfg.obstacles(:, :, k);
+                coord = intersectVectors(segment, obst);
+                if ~isnan(coord(1))
+                    % if the ray intersects with the obstacle
+                    valid = 0;
+                    break;
+                end
+            end
+        end
+        if valid
+            finalRays(:,:,finalRaysCnt) = rays(:,:,i);
+            finalRaysCnt = finalRaysCnt + 1;
+        end
+    end
 end
 
 function ray = instersectRay(obstacles, ray, index)
