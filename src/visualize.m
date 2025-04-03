@@ -18,6 +18,10 @@ function visualize(cfg, rays)
     xlim([-perp_road_length/2, perp_road_length/2]);
     ylim([-road_length/2, road_length/2]);
     zlim([0, max_building_height + 2]);
+    xlabel('X-axis (m)');
+    ylabel('Y-axis (m)');
+    zlabel('Z-axis (m)');
+
 
     %% Draw Road
     road_x = [-road_width/2, road_width/2, road_width/2, -road_width/2];
@@ -46,17 +50,28 @@ function visualize(cfg, rays)
 
     %% Draw Buildings (3D Boxes)
     y_pos = -road_length/2;
+    midFlag = 0;
+
     while y_pos < road_length/2
         % Random building dimensions
         building_width = min_building_width + (max_building_width - min_building_width) * rand;
         building_heightL = min_building_height + (max_building_height - min_building_height) * rand;
         building_heightR = min_building_height + (max_building_height - min_building_height) * rand;
 
+        if (midFlag == 0) & (y_pos + max_building_width > -road_width/2)
+            % Adjust the building width to fit the perpendicular road
+            building_width = -road_width/2 - y_pos;
+            midFlag = 1; % Set flag to indicate that the middle building has been drawn
+        elseif (midFlag == 1)
+            y_pos = road_width/2;
+            midFlag = 2; % Set flag to indicate that the middle building has been drawn
+        end
+
         % Left-side buildings
-        drawBuilding(-road_width/2 - avg_building_depth, y_pos + building_width/2, building_width, avg_building_depth, building_heightL, building_transparency);
+        drawBuilding(-road_width/2 - avg_building_depth, y_pos, building_width, avg_building_depth, building_heightL, building_transparency);
 
         % Right-side buildings
-        drawBuilding(road_width/2, y_pos + building_width/2, building_width, avg_building_depth, building_heightR, building_transparency);
+        drawBuilding(road_width/2, y_pos, building_width, avg_building_depth, building_heightR, building_transparency);
 
         % Update y_pos for next building
         y_pos = y_pos + building_width;
@@ -64,17 +79,27 @@ function visualize(cfg, rays)
 
     %% Draw Buildings Around Perpendicular Road
     x_pos = -perp_road_length/2;
+    midFlag = 0;
     while x_pos < perp_road_length/2
         % Random building dimensions
         building_width = min_building_width + (max_building_width - min_building_width) * rand;
         building_heightT = min_building_height + (max_building_height - min_building_height) * rand;
         building_heightB = min_building_height + (max_building_height - min_building_height) * rand;
 
+        if (midFlag == 0) & (x_pos + max_building_width > -road_width/2-avg_building_depth)
+            % Adjust the building width to fit the perpendicular road
+            building_width = -road_width/2-avg_building_depth - x_pos;
+            midFlag = 1; % Set flag to indicate that the middle building has been drawn
+        elseif (midFlag == 1)
+            x_pos = avg_building_depth+road_width/2;
+            midFlag = 2; % Set flag to indicate that the middle building has been drawn
+        end
+
         % Top-side buildings
-        drawBuilding(x_pos + building_width/2, road_width/2 + avg_building_depth, avg_building_depth, building_width, building_heightT, building_transparency);
+        drawBuilding(x_pos, road_width/2, avg_building_depth, building_width, building_heightT, building_transparency);
 
         % Bottom-side buildings
-        drawBuilding(x_pos + building_width/2, -road_width/2, avg_building_depth, building_width, building_heightB, building_transparency);
+        drawBuilding(x_pos, -road_width/2-avg_building_depth, avg_building_depth, building_width, building_heightB, building_transparency);
 
         % Update x_pos for next building
         x_pos = x_pos + building_width;
@@ -85,20 +110,20 @@ function visualize(cfg, rays)
     scatter3(cfg.RX_pos(1), cfg.RX_pos(2), cfg.graphical_params.car_size, 200, 'b', 'filled');   % Blue car (left lane)
 
     %% Draw Rays
-    colormap(jet); % Set the colormap to 'jet'
-    colorbar; % Display the colorbar
 
-    for i = 1:length(rays)
-        ray = rays(i);
-        if ray.distance == -1
-            continue;
+    colors = lines(size(rays, 3)); % Generate distinct colors for each ray
+    for i = 1:size(rays, 3)
+        ray = rays(:, :, i);
+        index = 1;
+        while (index < (cfg.bounce_limit+2) && norm(ray(index+1, :)))
+            % draw a line between ray(index, :) and ray(index+1, :)
+            line_x = [ray(index, 1), ray(index+1, 1)];
+            line_y = [ray(index, 2), ray(index+1, 2)];
+            z_pos = [cfg.graphical_params.car_size, cfg.graphical_params.car_size]; % Set z position to car size
+            % Draw the line with a unique color
+            plot3(line_x, line_y, z_pos, 'Color', colors(i, :), 'LineWidth', 2);
+            index = index + 1;
         end
-        % Normalize the distance to a value between 0 and 1 for color mapping
-        normalized_distance = (ray.distance - min([rays.distance])) / (max([rays.distance]) - min([rays.distance]));
-        % Map the normalized distance to a color using the colormap
-        ray_color = jet(256);
-        color_idx = round(normalized_distance * 255) + 1;
-        plot3(ray.points(1, :), ray.points(2, :), cfg.graphical_params.car_size*ones(1, length(ray.points)), 'Color', ray_color(color_idx, :), 'LineWidth', 1);
     end
 
     %% Camera Settings
@@ -108,32 +133,40 @@ function visualize(cfg, rays)
     title('Environment');
     rotate3d on; % Enable rotation
     set(gca, 'CameraViewAngleMode', 'manual'); % Prevent displacement
-    set(gca,'XTick',[],'YTick',[],'ZTick',[])
+    %set(gca,'XTick',[],'YTick',[],'ZTick',[])
 
     hold off;
 end
 
 %% Function to Draw Buildings (3D Box)
 function drawBuilding(x, y, depth, width, height, building_transparency)
+    % x, y: Coordinates of the bottom corner of the building base with the lowest values along the x and y axes
+    % depth: Extends along the y-axis
+    % width: Extends along the x-axis
+    % height: Extends along the z-axis
+
+    % Define the vertices of the building (3D box)
     vertices = [
-        x, y - depth/2, 0;  % Bottom front-left
-        x + width, y - depth/2, 0;  % Bottom front-right
-        x + width, y + depth/2, 0;  % Bottom back-right
-        x, y + depth/2, 0;  % Bottom back-left
-        x, y - depth/2, height;  % Top front-left
-        x + width, y - depth/2, height;  % Top front-right
-        x + width, y + depth/2, height;  % Top back-right
-        x, y + depth/2, height  % Top back-left
+        x, y, 0;  % Bottom front-left (origin corner)
+        x + width, y, 0;  % Bottom front-right
+        x + width, y + depth, 0;  % Bottom back-right
+        x, y + depth, 0;  % Bottom back-left
+        x, y, height;  % Top front-left
+        x + width, y, height;  % Top front-right
+        x + width, y + depth, height;  % Top back-right
+        x, y + depth, height  % Top back-left
     ];
 
+    % Define the faces of the building using the vertices
     faces = [
-        1 2 6 5; % Front
-        2 3 7 6; % Right
-        3 4 8 7; % Back
-        4 1 5 8; % Left
-        5 6 7 8; % Top
-        1 2 3 4; % Bottom
+        1 2 6 5; % Front face
+        2 3 7 6; % Right face
+        3 4 8 7; % Back face
+        4 1 5 8; % Left face
+        5 6 7 8; % Top face
+        1 2 3 4; % Bottom face
     ];
 
+    % Draw the building as a 3D patch
     patch('Vertices', vertices, 'Faces', faces, 'FaceColor', [0.6 0.6 0.9], 'EdgeColor', 'k', 'FaceAlpha', building_transparency);
 end
