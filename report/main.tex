@@ -75,45 +75,54 @@ As both transmitting and receiving antenna are vertical $\lambda/2$ dipoles, the
     \vec{h}_{e\perp} (\theta, \phi) = -\frac{\lambda}{\pi} \frac{\cos(\frac{\pi}{2}\cos \theta)}{\sin \theta}\vec{1_\theta}
 \end{align*}
 
-The transverse part of the equivalent height allows to give an expression for the emitted electric field.
+As $\theta$ and $\phi$ are spherical coordinates, the horizontal plane (in which the simulation is done) corresponds to $\theta = \pi/2$. The transverse equivalent height is then reduced to hte following, where it does not depend on the azimuthal angle $\phi$:
 
 \begin{align*}
-    \underline{\vec{E}} = j\frac{Z_0\underline{I}_a}{2\pi}\frac{\cos(\frac{\pi}{2}\cos \theta)}{\sin \theta}\frac{e^{-j\beta r}}{r}\vec{1_\theta}
+    \vec{h}_{e\perp} (\phi) = -\frac{\lambda}{\pi} \vec{1_{\theta}}\\
+\end{align*}
+
+The transverse part of the equivalent height gives rise to an expression for the emitted electric field.
+
+\begin{align*}
+    \underline{\vec{E}} &= -j\omega \underline{I}_a \frac{\mu_0}{4\pi}\frac{e^{-j\beta r}}{r}\vec{h}_{e\perp}(\theta, \phi) \\
+    &= j\omega \underline{I}_a \frac{\mu_0\lambda}{4\pi^2}\frac{e^{-j\beta r}}{r} \vec{1_{\theta}} \\
+    &= j \frac{\underline{I}_a \mu_0 c}{2\pi} \frac{e^{-j\beta r}}{r} \vec{1_{\theta}}\\
+    &= j \frac{\underline{I}_a Z_0}{2\pi} \frac{e^{-j\beta r}}{r} \vec{1_{\theta}}
 \end{align*}
 
 To make the transmission parameters appear in the electric field expression, $\beta$ and $\underline{I}_a$ must be replaced with the formulas given below. $Z_0$, $Z_a$, $Z_S$ can also be replaced by respectively $120\pi$, $\frac{720\pi}{32}$ and $\frac{720\pi}{32}$ (assuming the impedances are matching).
 
-\begin{align*}
+\begin{gather*}
     \beta = \frac{2\pi f_c}{c}\\
-    \underline{V}_{TX} = (Z_a + Z_S) \underline{I}_a
-\end{align*}
+    \underline{V}_{TX} = (Z_a + Z_S) \underline{I}_a = \frac{720\pi}{16} \underline{I}_a
+\end{gather*}
 
 Wich yields
 
 \begin{align*}
-    \underline{\vec{E}} = j\frac{120\pi\underline{V}_{TX}}{2\pi \frac{720\pi}{16}}\frac{\cos(\frac{\pi}{2}\cos \theta)}{\sin \theta}\frac{e^{-j \frac{2\pi f_c r}{c}}}{r}\vec{1_\theta}\\
-    \left . \underline{\vec{E}}\right\vert_{\theta = \pi/2} = -j\frac{4\underline{V}_{TX}}{3\pi}\frac{e^{-j \frac{2\pi f_c r}{c}}}{r}\vec{1_z}
+    \underline{\vec{E}} &= j \frac{120\pi\underline{I}_a}{2\pi} \frac{e^{-\frac{j2\pi f_c r}{c}}}{r} \vec{1_{\theta}}\\
+    &= j \frac{4\underline{V}_{TX}}{3\pi} \frac{e^{-\frac{j2\pi f_c r}{c}}}{r} \vec{1_{\theta}}
 \end{align*}
 
-Where $\theta$ has been chosen equal to $\pi /2$ in order to study only the electric filed in the horizontal place. At the receiving side, the incoming electric filed $\underline{\vec{E}}_i$ is simply equal to the transmitted electric field after it traveled over a distance $r = c\tau$ where $\tau$ is the propagation delay. This is of course in the case of line of sight (LOS) communication with no interfering object (IO) between TX and RX.
+The last step is to replace the travel distance $r$ with $c \tau$ as the wave is propagating at the speed of light in free space. The electric field thus becomes:
 
 \begin{align*}
-    \underline{\vec{E}}_i = -j\frac{4 c \underline{V}_{TX}}{3\pi}\frac{e^{-j 2\pi f_c \tau}}{\tau}\vec{1_z}
+    \underline{\vec{E}} &= j \frac{4 c \underline{V}_{TX}}{3\pi} \frac{e^{-j2\pi f_c \tau}}{\tau} \vec{1_{\theta}}
 \end{align*}
 
-The voltage at the output of the antenna $\underline{V}_{RX}$ can be deduced as it is a voltage divider. Assuming a matching between the antenna and the load, we have:
+The voltage at the output of the antenna $\underline{V}_{RX}$ can be deduced from the equivalent electric circuit \ref{fig:equivalent_electrical_circuit} as it is a simple voltage divider. Assuming a matching between the antenna and the load, we have:
 
 \begin{align*}
     \underline{V}_{RX} = \frac{Z_L}{Z_a + Z_L} \underline{V}_{oc} = \frac{1}{2} \underline{V}_{oc}\\
     \underline{V}_{oc} = -\left . \vec{h}_{e\perp}(\theta, \phi)\right\vert_{\theta = \pi/2} \cdot \underline{\vec{E}}_i
 \end{align*}
 
-Resulting in:
+Where $\underline{\vec{E}}_i = - \underline{\vec{E}}$ due to the change of coordinates origin. It is here assumed that there was no reflexion, refraction or transmission through another material. This results in:
 
 \begin{align*}
     \underline{V}_{oc} &= \frac{\lambda}{\pi} \cdot \underline{E}_i\\
     &= -j\frac{4 c \lambda \underline{V}_{TX}}{3\pi^2}\frac{e^{-j 2\pi f_c \tau}}{\tau}\\
-    \underline{V}_{RX} &= -j\frac{2 c \lambda \underline{V}_{TX}}{3\pi^2}\frac{e^{-j 2\pi f_c \tau}}{\tau}
+    \underline{V}_{RX} &= -j\frac{2 c \lambda }{3\pi^2}\frac{e^{-j 2\pi f_c \tau}}{\tau}\underline{V}_{TX}
 \end{align*}
 
 \section{Step 2}
@@ -188,7 +197,7 @@ Two deductions can be made of this result:
 
 \section{About the simulation}
 
-As the road is surrounded by buildings which are assumed to have thick walls, any ray going through a building is neglected.
+As the road is surrounded by buildings which are assumed to have thick walls, any ray going through a building is considered to be fully attenuated.
 
 %\printglossary
 
