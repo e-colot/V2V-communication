@@ -115,7 +115,7 @@ function visualize(cfg, rays)
     for i = 1:size(rays, 3)
         ray = rays(:, :, i);
         index = 1;
-        while (index < (cfg.bounce_limit+2) && norm(ray(index+1, :)))
+        while (index < (cfg.bounce_limit+2) && ~isnan(ray(index+1, 1)))
             % draw a line between ray(index, :) and ray(index+1, :)
             line_x = [ray(index, 1), ray(index+1, 1)];
             line_y = [ray(index, 2), ray(index+1, 2)];
