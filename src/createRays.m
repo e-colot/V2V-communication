@@ -1,5 +1,7 @@
-function rays = createRays(cfg)
+function [rays, angles, lengths] = createRays(cfg)
     rays = [];
+    angles = [];
+    lengths = [];
     raysCnt = 1;
     obstID = zeros(1, cfg.bounce_limit);
 
@@ -16,6 +18,8 @@ function rays = createRays(cfg)
             i = i + 1;
         end
         ray(i+1, :) = cfg.RX_pos;
+        angleToCheck = atan2(ray(i+1, 2) - ray(i, 2), ray(1, 1) - ray(1, 1))*180/pi;
+        lengthToCheck = norm(ray(i+1, :) - ray(1, :));
         rayToCheck = instersectRay(obst, ray, size(obst, 3));
         if ~isnan(rayToCheck(1))
             % check if the ray intersects an obstacle
@@ -39,6 +43,8 @@ function rays = createRays(cfg)
             end
             if valid
                 rays(:,:,raysCnt) = rayToCheck;
+                angles(raysCnt) = angleToCheck;
+                lengths(raysCnt) = lengthToCheck;
                 raysCnt = raysCnt + 1;
             end
         end

@@ -1,5 +1,15 @@
-function visualize(cfg, rays)
+function visualize(cfg, rays, angles, lengths)
+    
     %% Parameters
+    
+    legendFull = 1;
+    legendEntries = {};
+    if nargin < 4
+        legendFull = 0; 
+        t = tiledlayout('flow','TileSpacing','compact');
+        nexttile;
+    end
+
     road_width = cfg.environment_params.road_width;          % Width of the road
     road_length = cfg.environment_params.road_length;        % Length of the road
     perp_road_length = cfg.environment_params.perpendicular_road_length; % Length of the perpendicular road
@@ -22,6 +32,51 @@ function visualize(cfg, rays)
     ylabel('Y-axis (m)');
     zlabel('Z-axis (m)');
 
+    %% Place Cars
+    legendHandles = []; % Initialize an array to store handles for legend
+
+    legendHandles = [legendHandles, scatter3(cfg.TX_pos(1), cfg.TX_pos(2), cfg.graphical_params.car_size, 200, 'r', 'filled')]; % Red car (left lane)
+    legendHandles = [legendHandles, scatter3(cfg.RX_pos(1), cfg.RX_pos(2), cfg.graphical_params.car_size, 200, 'b', 'filled')];   % Blue car (left lane)
+
+    %% Draw Rays
+
+    
+
+    colors = lines(size(rays, 3)); % Generate distinct colors for each ray
+    if isempty(rays)
+        % no rays to draw
+    else 
+        for i = 1:size(rays, 3)
+            ray = rays(:, :, i);
+            index = 1;
+            while (index < (cfg.bounce_limit+2) && ~isnan(ray(index+1, 1)))
+                % draw a line between ray(index, :) and ray(index+1, :)
+                line_x = [ray(index, 1), ray(index+1, 1)];
+                line_y = [ray(index, 2), ray(index+1, 2)];
+                z_pos = [cfg.graphical_params.car_size, cfg.graphical_params.car_size]; % Set z position to car size
+                % Draw the line with a unique color
+                if index == 1
+                    % First line, add to legend
+                    legendHandles = [legendHandles, plot3(line_x, line_y, z_pos, 'Color', colors(i, :), 'LineWidth', 2)];
+                else
+                    plot3(line_x, line_y, z_pos, 'Color', colors(i, :), 'LineWidth', 2);
+                end
+                index = index + 1;
+            end
+        end
+    end
+
+    % Add legend entries for the rays
+    if legendFull
+        legendEntries = {'TX', 'RX'};
+        if ~isempty(rays)
+            % Add legend entries for each ray
+            for i = 1:size(rays, 3)
+                legendEntries{end+1} = ['Ray ' num2str(i) ' (Angle: ' num2str(angles(i)) '°, Length: ' num2str(lengths(i)) ' m)'];
+            end
+        end
+        lgd = legend(legendHandles, legendEntries, 'AutoUpdate','off', 'Location','eastoutside', 'FontSize', 15);
+    end
 
     %% Draw Road
     road_x = [-road_width/2, road_width/2, road_width/2, -road_width/2];
@@ -103,31 +158,6 @@ function visualize(cfg, rays)
 
         % Update x_pos for next building
         x_pos = x_pos + building_width;
-    end
-
-    %% Place Cars
-    scatter3(cfg.TX_pos(1), cfg.TX_pos(2), cfg.graphical_params.car_size, 200, 'r', 'filled'); % Red car (left lane)
-    scatter3(cfg.RX_pos(1), cfg.RX_pos(2), cfg.graphical_params.car_size, 200, 'b', 'filled');   % Blue car (left lane)
-
-    %% Draw Rays
-
-    colors = lines(size(rays, 3)); % Generate distinct colors for each ray
-    if isempty(rays)
-        % no rays to draw
-    else 
-        for i = 1:size(rays, 3)
-            ray = rays(:, :, i);
-            index = 1;
-            while (index < (cfg.bounce_limit+2) && ~isnan(ray(index+1, 1)))
-                % draw a line between ray(index, :) and ray(index+1, :)
-                line_x = [ray(index, 1), ray(index+1, 1)];
-                line_y = [ray(index, 2), ray(index+1, 2)];
-                z_pos = [cfg.graphical_params.car_size, cfg.graphical_params.car_size]; % Set z position to car size
-                % Draw the line with a unique color
-                plot3(line_x, line_y, z_pos, 'Color', colors(i, :), 'LineWidth', 2);
-                index = index + 1;
-            end
-        end
     end
 
     %% Camera Settings
