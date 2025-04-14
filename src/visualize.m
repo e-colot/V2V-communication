@@ -112,25 +112,29 @@ function visualize(cfg, rays)
     %% Draw Rays
 
     colors = lines(size(rays, 3)); % Generate distinct colors for each ray
-    for i = 1:size(rays, 3)
-        ray = rays(:, :, i);
-        index = 1;
-        while (index < (cfg.bounce_limit+2) && ~isnan(ray(index+1, 1)))
-            % draw a line between ray(index, :) and ray(index+1, :)
-            line_x = [ray(index, 1), ray(index+1, 1)];
-            line_y = [ray(index, 2), ray(index+1, 2)];
-            z_pos = [cfg.graphical_params.car_size, cfg.graphical_params.car_size]; % Set z position to car size
-            % Draw the line with a unique color
-            plot3(line_x, line_y, z_pos, 'Color', colors(i, :), 'LineWidth', 2);
-            index = index + 1;
+    if isempty(rays)
+        % no rays to draw
+    else 
+        for i = 1:size(rays, 3)
+            ray = rays(:, :, i);
+            index = 1;
+            while (index < (cfg.bounce_limit+2) && ~isnan(ray(index+1, 1)))
+                % draw a line between ray(index, :) and ray(index+1, :)
+                line_x = [ray(index, 1), ray(index+1, 1)];
+                line_y = [ray(index, 2), ray(index+1, 2)];
+                z_pos = [cfg.graphical_params.car_size, cfg.graphical_params.car_size]; % Set z position to car size
+                % Draw the line with a unique color
+                plot3(line_x, line_y, z_pos, 'Color', colors(i, :), 'LineWidth', 2);
+                index = index + 1;
+            end
         end
     end
 
     %% Camera Settings
-    view(15, 8);
+    view(111, 45);
     camlight;
     lighting gouraud;
-    title('Environment');
+    title('Road');
     rotate3d on; % Enable rotation
     set(gca, 'CameraViewAngleMode', 'manual'); % Prevent displacement
     %set(gca,'XTick',[],'YTick',[],'ZTick',[])
