@@ -133,7 +133,7 @@ Assuming the communication takes place via a LOS ray only, the channel impulse r
     h(\tau) = \frac{\alpha_1 e^{-j2\pi f_c \tau_1}}{d_1} \delta(\tau - \tau_1)
 \end{align*}
 
-Where $\tau_1$ is the propagation delay and $d_1$ the propagation distance of the direct ray. $\alpha_1$ (which might be complex) takes into account a phase change or attenuation due for example to reflections whereas the imaginary exponential next to it corresponds to the phase change due to the propagation delay. In the case of LOS transmission, we have $\alpha_1 = 1$.\\
+Where $\tau_1$ is the propagation delay and $d_1$ the propagation distance of the direct ray. $\alpha_1$ (which might be complex) takes into account a phase change or attenuation due for example to reflections whereas the imaginary exponential next to it corresponds to the phase change due to the propagation delay. In the case of LOS transmission $\alpha_1$ is equal to 1.\\
 The transfer function $H(f)$ of the channel is found by taking the Fourier transform of $h(\tau)$
 
 \begin{align*}
@@ -151,7 +151,7 @@ As we consider a single ray, the narrowband model of the channel $h_{NB}$ (repre
 The ratio between the received power $P_{RX}$ and the transmitted power $P_{TX}$ is found with:
 
 \begin{align}
-    \frac{P_{RX}}{P_{TX}} &= \frac{\left| h(\tau) \right|^2}{2} \nonumber\\
+    \frac{P_{\text{received}}}{P_{\text{transmitted}}} &= \frac{\left| h(\tau) \right|^2}{2} \nonumber\\
     &= \frac{1}{d_1^2}
     \label{eq:power_approx}
 \end{align}
@@ -163,7 +163,7 @@ This result can be compared with the Friis formula, given by:
     \label{eq:friis_formula}
 \end{align}
 
-The reason for the big difference between the two formulas can be easily explained: in eq \ref{eq:power_approx}, the powers $P_{RX}$ and $P_{TX}$ are the ones of the wave without taking the antennas into account. To correct it:
+The reason for the big difference between the two formulas can be easily explained: in eq \ref{eq:power_approx}, $P_{\text{transmitted}}$ and $P_{\text{received}}$ are the powers of the waves, not the one of the signal before/after passing through the antennas. To correct it, they are replaced by the Poynting vectors $\bm{\vec{\mathscr{S}}}_{TX}$ and $\bm{\vec{\mathscr{S}}}_{RX}$:
 
 \begin{align}
     \frac{\left|\bm{\vec{\mathscr{S}}}_{RX}\right|}{\left|\bm{\vec{\mathscr{S}}}_{TX}\right|} = \frac{1}{d_1^2}
@@ -178,18 +178,19 @@ To compare the received and the injected power, the Poynting vectors should be r
     \text{where} \quad \quad A_{eRX} = G_{RX}\left(\frac{\lambda}{4\pi}\right)^2
 \end{align*}
 
-When placed back in eq \ref{eq:poynting}, the expression matches the Friis formula. As the antennas are considered to be lossless dipoles, equation \ref{eq:power_friis_simplified} replaces their gain by $\frac{16}{3\pi}$, the theoretical gain.
+When placed back in eq \ref{eq:poynting}, the expression matches the Friis formula (eq \ref{eq:friis_formula}). \\
+To further simplify As the antennas are considered to be lossless dipoles, equation \ref{eq:power_friis_simplified} replaces their gain by $\frac{16}{3\pi}$, the theoretical gain of such antennas.
 
 \begin{align}
     \frac{P_{RX}}{P_{TX}} &= G_{TX} G_{RX} \left(\frac{\lambda}{4\pi d_1}\right)^2\\
     \label{eq:power_friis_simplified}
-    &= \frac{256}{9\pi^2} \left(\frac{\lambda}{4\pi d_1}\right)^2
+    &= \frac{16}{9\pi^2} \left(\frac{\lambda}{\pi d_1}\right)^2
 \end{align}
 
 Two deductions can be made of this result: 
 \begin{itemize}
-    \item The power loss on the channel depends on the square of the distance between the emitter and the receiver. It implies that doubling the range of an antenna would a multiplication of the transmitting power by a factor 4.
-    \item A more surprising result is the wavelength squared appearing at the numerator. It shows that there is always a compromise between data rate and power consumption as a larger wavelength will indeed be less attenuated but the maximal data rate will then be lowered in order for the bandwidth of the transmitted signal to be much lower than the carrier frequency.
+    \item The power loss on the channel depends on the square of the distance between the emitter and the receiver. It implies that doubling the range of an antenna would need a multiplication of the transmitting power by a factor 4.
+    \item A more surprising result is the wavelength squared appearing at the numerator. It shows that there is always a compromise between data rate and power consumption as a larger wavelength will indeed be less attenuated but the maximal data rate will then be lowered in order for the channel to still be considered as narrowband.
 \end{itemize}
 
 \section{Step 3}
