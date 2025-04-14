@@ -10,6 +10,7 @@ function finalRays = createRays(cfg)
         obst = [];
         i = 1;
         while(i <= length(obstID) && obstID(i) ~= 0)
+            % adding reflexions on obstacles
             ray(i+1, :) = mirrorCoord(ray(i, :), cfg.obstacles(:, :, obstID(i)));
             obst(:,:,end+1) = cfg.obstacles(:, :, obstID(i));
             i = i + 1;
@@ -23,6 +24,7 @@ function finalRays = createRays(cfg)
         end
 
         % update obstID
+        % used to get the obstacles for the next ray
         valid = 0;
         while(~valid)
             j = length(obstID);
@@ -71,7 +73,7 @@ function finalRays = createRays(cfg)
                 % for each obstacle
                 obst = cfg.obstacles(:, :, k);
                 coord = intersectVectors(segment, obst);
-                if ~isnan(coord(1))
+                if (~isnan(coord(1)) && ~isnan(coord(2)))
                     % if the ray intersects with the obstacle
                     valid = 0;
                     break;
