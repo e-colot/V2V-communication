@@ -1,4 +1,4 @@
-function finalRays = createRays(cfg)
+function rays = createRays(cfg)
     rays = [];
     raysCnt = 1;
     obstID = zeros(1, cfg.bounce_limit);
@@ -18,9 +18,29 @@ function finalRays = createRays(cfg)
         ray(i+1, :) = cfg.RX_pos;
         rayToCheck = instersectRay(obst, ray, size(obst, 3));
         if ~isnan(rayToCheck(1))
-            rays(:,:,raysCnt) = rayToCheck;
-            validObstID(raysCnt,:) = obstID;
-            raysCnt = raysCnt + 1;
+            % check if the ray intersects an obstacle
+            valid = 1;
+            for j = 1:size(rayToCheck, 1)-1
+                % for each segment of the ray
+                segment = [rayToCheck(j, :); rayToCheck(j+1, :)];
+                if isnan(rayToCheck(j+1, :))
+                    break;
+                end
+                for k = 1:size(cfg.obstacles, 3)
+                    % for each obstacle
+                    obst = cfg.obstacles(:, :, k);
+                    coord = intersectVectors(segment, obst);
+                    if (~isnan(coord(1)) && ~isnan(coord(2)))
+                        % if the ray intersects with the obstacle
+                        valid = 0;
+                        break;
+                    end
+                end
+            end
+            if valid
+                rays(:,:,raysCnt) = rayToCheck;
+                raysCnt = raysCnt + 1;
+            end
         end
 
         % update obstID
@@ -54,36 +74,6 @@ function finalRays = createRays(cfg)
             end
         end
 
-    end
-
-    % remove rays that intersect obstacles
-    finalRays = [];
-    finalRaysCnt = 1;
-    for i = 1:size(rays, 3)
-        % for each ray
-        ray = rays(:,:,i);
-        valid = 1;
-        for j = 1:size(ray, 1)-1
-            % for each segment of the ray
-            segment = [ray(j, :); ray(j+1, :)];
-            if isnan(ray(j+1, :))
-                break;
-            end
-            for k = 1:size(cfg.obstacles, 3)
-                % for each obstacle
-                obst = cfg.obstacles(:, :, k);
-                coord = intersectVectors(segment, obst);
-                if (~isnan(coord(1)) && ~isnan(coord(2)))
-                    % if the ray intersects with the obstacle
-                    valid = 0;
-                    break;
-                end
-            end
-        end
-        if valid
-            finalRays(:,:,finalRaysCnt) = rays(:,:,i);
-            finalRaysCnt = finalRaysCnt + 1;
-        end
     end
 end
 
