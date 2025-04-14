@@ -130,7 +130,7 @@ function visualize(cfg, rays)
     view(15, 8);
     camlight;
     lighting gouraud;
-    title('Environment');
+    title('Road');
     rotate3d on; % Enable rotation
     set(gca, 'CameraViewAngleMode', 'manual'); % Prevent displacement
     %set(gca,'XTick',[],'YTick',[],'ZTick',[])
