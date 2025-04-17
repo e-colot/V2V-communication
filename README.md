@@ -1,8 +1,3 @@
-<script
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-  type="text/javascript">
-</script>
-
 # V2V Communication Project
 
 This project focuses on Vehicle-to-Vehicle (V2V) communication, exploring the theoretical and practical aspects of communication channels in vehicular networks. The aim is to analyze how the environment behaves and to build a channel model in the test conditions.
