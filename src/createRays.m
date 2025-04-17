@@ -3,6 +3,7 @@ function rays = createRays(cfg)
     rays.points = [];
     rays.angles = [];
     rays.lengths = [];
+    rays.reflexionAttenuation = [];
     raysCnt = 1;
     obstID = zeros(1, cfg.bounce_limit);
 
@@ -12,6 +13,7 @@ function rays = createRays(cfg)
         ray(1,:) = cfg.TX_pos';
         obst = [];
         i = 1;
+        attenuationToCheck = 1;
         while(i <= length(obstID) && obstID(i) ~= 0)
             % adding reflexions on obstacles
             ray(i+1, :) = mirrorCoord(ray(i, :), cfg.obstacles(:, :, obstID(i)));
@@ -21,7 +23,7 @@ function rays = createRays(cfg)
         ray(i+1, :) = cfg.RX_pos;
         angleToCheck = atan2(ray(i+1, 2) - ray(i, 2), ray(i+1, 1) - ray(i, 1))*180/pi;
         lengthToCheck = norm(ray(i+1, :) - ray(i, :));
-        rayToCheck = instersectRay(obst, ray, size(obst, 3));
+        [rayToCheck, attenuationToCheck] = instersectRay(obst, ray, size(obst, 3), attenuationToCheck);
         if ~isnan(rayToCheck(1))
             % check if the ray intersects an obstacle
             valid = 1;
@@ -34,7 +36,7 @@ function rays = createRays(cfg)
                 for k = 1:size(cfg.obstacles, 3)
                     % for each obstacle
                     obst = cfg.obstacles(:, :, k);
-                    coord = intersectVectors(segment, obst);
+                    [coord, ~] = intersectVectors(segment, obst);
                     if (~isnan(coord(1)) && ~isnan(coord(2)))
                         % if the ray intersects with the obstacle
                         valid = 0;
@@ -46,6 +48,7 @@ function rays = createRays(cfg)
                 rays.points(:,:,raysCnt) = rayToCheck;
                 rays.angles(raysCnt) = angleToCheck;
                 rays.lengths(raysCnt) = lengthToCheck;
+                rays.reflexionAttenuation(raysCnt) = attenuationToCheck;
                 raysCnt = raysCnt + 1;
             end
         end
@@ -84,21 +87,22 @@ function rays = createRays(cfg)
     end
 end
 
-function ray = instersectRay(obstacles, ray, index)
+function [ray, attenuation] = instersectRay(obstacles, ray, index, attenuation)
     if index <= 1
         % no more bounces
         return;
     end
     % check if the ray intersects with the obstacle
-    coord = intersectVectors([ray(index, :); ray(index+1, :)], obstacles(:, :, index));
+    [coord, angle] = intersectVectors([ray(index, :); ray(index+1, :)], obstacles(:, :, index));
     if isnan(coord(1))
         ray = NaN;
         return;
     end
     % if the ray intersects with the obstacle
     ray(index, :) = coord;
+    attenuation = attenuation * reflexion(angle);
 
-    ray = instersectRay(obstacles, ray, index-1);
+    [ray, attenuation] = instersectRay(obstacles, ray, index-1, attenuation);
     return
 end
 

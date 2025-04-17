@@ -1,18 +1,19 @@
-function gamma = reflexion(angle, cfg)
+function gamma = reflexion(angle, epsilon)
 
     % Calculate the reflexion coefficient gamma based on the angle of incidence
     % and the relative permittivity of the material.
-    % angle: angle of incidence in degrees
+    % angle: angle of incidence in radians
     % cfg: configuration structure containing environment parameters
 
-    % Convert angle to radians
-    angle_rad = deg2rad(angle);
+    % init
+    persistent eps;
+    if nargin == 2 % if cfg is passed, use it
+        eps = epsilon;
+    end
 
     % gamma = cos(angle_rad) - y / (cos(angle_rad) + y)
+    y = sqrt(eps * (1 - sin(angle)^2 / eps)); 
 
-    eps = cfg.environment_params.bld_rel_perm; % relative permittivity of the buildings
-    y = sqrt(eps*(1-sin(angle_rad)^2/eps)); 
-
-    gamma = cos(angle_rad) - y / (cos(angle_rad) + y); % reflexion coefficient
+    gamma = (cos(angle) - y) / (cos(angle) + y); % reflexion coefficient
 
 end

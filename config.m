@@ -44,4 +44,7 @@ function cfg = config()
 
     cfg.obstacles = createObstacles(cfg); % create obstacles
 
+    % initialize reflexion
+    reflexion(0, cfg.environment_params.bld_rel_perm);
+
 end
