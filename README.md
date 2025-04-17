@@ -12,5 +12,6 @@ This project focuses on Vehicle-to-Vehicle (V2V) communication, exploring the th
 
 ## Questions
 
-- Why are the $$\Gamma_{\perp}$$ values real and not complex?
+- Why are the $$\Gamma_{\perp}$$ values real and not complex - *question 3.2 in* `.\physicalFormulas\reflexion.m`
+- $$P_{RX}$$ as function of $$P_{TX}$$ seems strange. More likely to be as function of distance - *question 3.3 in* `.\steps_specific\step3_3.m`
 

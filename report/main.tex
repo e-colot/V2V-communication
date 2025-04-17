@@ -186,7 +186,7 @@ To compare the received and the injected power, the Poynting vectors should be r
 \end{align*}
 
 When placed back in eq \ref{eq:poynting}, the expression matches the Friis formula (eq \ref{eq:friis_formula}). \\
-To further simplify As the antennas are considered to be lossless dipoles, equation \ref{eq:power_friis_simplified} replaces their gain by $\frac{16}{3\pi}$, the theoretical gain of such antennas.
+To further simplify and as the antennas are considered to be lossless dipoles, equation \ref{eq:power_friis_simplified} replaces their gain by $\frac{16}{3\pi}$, the theoretical gain of such antennas.
 
 \begin{align}
     \frac{P_{RX}}{P_{TX}} &= G_{TX} G_{RX} \left(\frac{\lambda}{4\pi d_1}\right)^2\\
@@ -246,6 +246,19 @@ The voltage carried by each ray is shown in figure \ref{fig:voltageDemo} using a
     \caption{Received voltage for each ray}
     \label{fig:voltageDemo}
 \end{figure}
+
+By varying the distance between the two communicating cars between 0 and 1000m, a comparison is made between the raytracing simulation and the theoretical model (equation \ref{eq:power_friis_simplified}) on figure \ref{fig:P_RX(d)}:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{3_3.png}
+    \caption{Received power as a function of the distance between the two cars}
+    \label{fig:P_RX(d)}
+\end{figure}
+
+For short distances, the LOS ray is the only one contributing to the received power which explains the good match of the simulation with theory. \\
+After a few meters, the multi path components (MPC) start to have an impact on the received power and the resulting interferences make the simulated power oscillate around the true power. \\
+At greater distances and because of the limited number of bounces, one can clearly see the power is a multisine signal. This is because the reflection angles don't vary much with the distance at that point.
 
 \section{About the simulation}
 

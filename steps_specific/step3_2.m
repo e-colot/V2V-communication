@@ -21,4 +21,3 @@ view(114, 47);
 sum_voltages = sum(rays.voltages(:)); % Sum of all elements in rays.voltages
 disp(['Total received voltage: ', num2str(norm(sum_voltages)*1e6), ' µV']); % Display the sum of voltages
 disp(['phase: ', num2str(angle(sum_voltages)*180/pi), ' degrees']); % Display the phase of the sum of voltages
-
