@@ -18,8 +18,8 @@ function [rays, angles, lengths] = createRays(cfg)
             i = i + 1;
         end
         ray(i+1, :) = cfg.RX_pos;
-        angleToCheck = atan2(ray(i+1, 2) - ray(i, 2), ray(1, 1) - ray(1, 1))*180/pi;
-        lengthToCheck = norm(ray(i+1, :) - ray(1, :));
+        angleToCheck = atan2(ray(i+1, 2) - ray(i, 2), ray(i+1, 1) - ray(i, 1))*180/pi;
+        lengthToCheck = norm(ray(i+1, :) - ray(i, :));
         rayToCheck = instersectRay(obst, ray, size(obst, 3));
         if ~isnan(rayToCheck(1))
             % check if the ray intersects an obstacle

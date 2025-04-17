@@ -17,4 +17,3 @@ xlim([30 170]);
 ylim([-cfg.environment_params.road_width cfg.environment_params.road_width]);
 view(114, 47);
 
-

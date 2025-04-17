@@ -4,8 +4,10 @@ function cfg = config()
     % setup the path
     project_root = fileparts(mfilename('fullpath')); % Get project root
     src_path = fullfile(project_root, 'src');
+    formula_path = fullfile(project_root, 'physicalFormulas');
     if ~contains(path, src_path)
         addpath(genpath(src_path));
+        addpath(genpath(formula_path));
     end
 
     cfg = struct();

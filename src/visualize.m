@@ -69,10 +69,12 @@ function visualize(cfg, rays, angles, lengths)
     % Add legend entries for the rays
     if legendFull
         legendEntries = {'TX', 'RX'};
+        anglesCorr = round(180 - mod(angles, 360),2);
+        lengthsCorr = round(lengths,2);
         if ~isempty(rays)
             % Add legend entries for each ray
             for i = 1:size(rays, 3)
-                legendEntries{end+1} = ['Ray ' num2str(i) ' (Angle: ' num2str(angles(i)) '°, Length: ' num2str(lengths(i)) ' m)'];
+                legendEntries{end+1} = ['Ray ' num2str(i) ' (Angle: ' num2str(anglesCorr(i)) '°, Length: ' num2str(lengthsCorr(i)) ' m)'];
             end
         end
         lgd = legend(legendHandles, legendEntries, 'AutoUpdate','off', 'Location','eastoutside', 'FontSize', 15);
@@ -204,3 +206,4 @@ function drawBuilding(x, y, depth, width, height, building_transparency)
     % Draw the building as a 3D patch
     patch('Vertices', vertices, 'Faces', faces, 'FaceColor', [0.6 0.6 0.9], 'EdgeColor', 'k', 'FaceAlpha', building_transparency);
 end
+
