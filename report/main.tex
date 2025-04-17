@@ -107,7 +107,7 @@ Wich yields
 The last step is to replace the travel distance $r$ with $c \tau$ as the wave is propagating at the speed of light in free space. The electric field thus becomes:
 
 \begin{align*}
-    \underline{\vec{E}} &= j \frac{4 c \underline{V}_{TX}}{3\pi} \frac{e^{-j2\pi f_c \tau}}{\tau} \vec{1_{\theta}}
+    \underline{\vec{E}} &= j \frac{4 \underline{V}_{TX}}{3\pi} \frac{e^{-j2\pi f_c \tau}}{c\tau} \vec{1_{\theta}}
 \end{align*}
 
 The voltage at the output of the antenna $\underline{V}_{RX}$ can be deduced from the equivalent electric circuit \ref{fig:equivalent_electrical_circuit} as it is a simple voltage divider. Assuming a matching between the antenna and the load, we have:
@@ -121,8 +121,14 @@ Where $\underline{\vec{E}}_i = - \underline{\vec{E}}$ due to the change of coord
 
 \begin{align*}
     \underline{V}_{oc} &= \frac{\lambda}{\pi} \cdot \underline{E}_i\\
-    &= -j\frac{4 c \lambda \underline{V}_{TX}}{3\pi^2}\frac{e^{-j 2\pi f_c \tau}}{\tau}\\
-    \underline{V}_{RX} &= -j\frac{2 c \lambda }{3\pi^2}\frac{e^{-j 2\pi f_c \tau}}{\tau}\underline{V}_{TX}
+    &= -j\frac{4  \lambda \underline{V}_{TX}}{3\pi^2}\frac{e^{-j 2\pi f_c \tau}}{c\tau}\\
+    \underline{V}_{RX} &= -j\frac{2  \lambda }{3\pi^2}\frac{e^{-j 2\pi f_c \tau}}{c\tau}\underline{V}_{TX}
+\end{align*}
+
+For a practical use in step 3, the time of flight $\tau$ is replaced by the traveled distance $d$ to get:
+
+\begin{align*}
+    \underline{V}_{RX} &= -j\frac{2 \lambda }{3\pi^2}\frac{e^{-j\frac{2\pi f_c d}{c}}}{d}\underline{V}_{TX}
 \end{align*}
 
 \section{Step 2}
@@ -130,22 +136,22 @@ Where $\underline{\vec{E}}_i = - \underline{\vec{E}}$ due to the change of coord
 Assuming the communication takes place via a LOS ray only, the channel impulse response $h(\tau)$ is defined as follows:
 
 \begin{align*}
-    h(\tau) = \frac{\alpha_1 e^{-j2\pi f_c \tau_1}}{d_1} \delta(\tau - \tau_1)
+    h(\tau) = \frac{\alpha_1 e^{-j\frac{2\pi f_cd_1}{c}}}{d_1} \delta(\tau - \frac{d_1}{c})
 \end{align*}
 
-Where $\tau_1$ is the propagation delay and $d_1$ the propagation distance of the direct ray. $\alpha_1$ (which might be complex) takes into account a phase change or attenuation due for example to reflections whereas the imaginary exponential next to it corresponds to the phase change due to the propagation delay. In the case of LOS transmission $\alpha_1$ is equal to 1.\\
+Where $d_1$ the distance of propagation of the direct ray. $\alpha_1$ (which might be complex) takes into account a phase change or attenuation due for example to reflections whereas the imaginary exponential next to it corresponds to the phase change due to the propagation delay. In the case of LOS transmission $\alpha_1$ is equal to 1.\\
 The transfer function $H(f)$ of the channel is found by taking the Fourier transform of $h(\tau)$
 
 \begin{align*}
     H(f) &= \int_{-\infty}^{\infty} h(\tau) e^{-j2\pi f \tau} d\tau\\
-    &= \frac{e^{-j2\pi f_c \tau_1}}{d_1}e^{-j2\pi f \tau_1}\\
-    &= \frac{e^{-j2\pi (f+f_c) \tau_1}}{d_1}\\
+    &= \frac{e^{-j\frac{2\pi f_c d_1}{c}}}{d_1}e^{-j2\pi f \frac{d_1}{c}}\\
+    &= \frac{e^{-j \frac{2\pi (f+f_c)d_1}{c}}}{d_1}\\
 \end{align*}
 
 As we consider a single ray, the narrowband model of the channel $h_{NB}$ (representing the case where the receiver perceives the sum of all propagation path) is simply found by removing the Dirac pulse from $h(\tau)$
 
 \begin{align*}
-    h_{NB} = \frac{e^{-j2\pi f_c \tau_1}}{d_1}
+    h_{NB} = \frac{e^{-j \frac{2\pi f_cd_1}{c}}}{d_1}
 \end{align*}
 
 The ratio between the received power $P_{RX}$ and the transmitted power $P_{TX}$ is found with:
@@ -195,6 +201,14 @@ Two deductions can be made of this result:
 
 \section{Step 3}
 
+After having implemented a raytracing algorithm, the simulation is able to compute every path from the transmitter to the receiver. Figure \ref{fig:raytracingDemo} shows the result of the simulation for cars spaced by 100m on a 20m wide road surrounded by buildings.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{3_1.png}
+    \caption{Raytracing simulation of a road surrounded by buildings}
+    \label{fig:raytracingDemo}
+\end{figure}
 
 \section{About the simulation}
 
