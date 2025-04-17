@@ -127,9 +127,10 @@ Where $\underline{\vec{E}}_i = - \underline{\vec{E}}$ due to the change of coord
 
 For a practical use in step 3, the time of flight $\tau$ is replaced by the traveled distance $d$ to get:
 
-\begin{align*}
+\begin{align}
     \underline{V}_{RX} &= -j\frac{2 \lambda }{3\pi^2}\frac{e^{-j\frac{2\pi f_c d}{c}}}{d}\underline{V}_{TX}
-\end{align*}
+    \label{eq:voltage_RX}
+\end{align}
 
 \section{Step 2}
 
@@ -201,13 +202,49 @@ Two deductions can be made of this result:
 
 \section{Step 3}
 
-After having implemented a raytracing algorithm, the simulation is able to compute every path from the transmitter to the receiver. Figure \ref{fig:raytracingDemo} shows the result of the simulation for cars spaced by 100m on a 20m wide road surrounded by buildings.
+After having implemented a raytracing algorithm, the simulation is able to compute every path from the transmitter to the receiver. Figure \ref{fig:raytracingDemo} shows the result of the simulation for cars spaced by 100m on a 20m wide road surrounded by buildings. For a better understanding, the angles are computed between the buildings and the rays. This is only done on this graph as the angles used to compute the reflection coefficients $\Gamma_{\perp}$ are the ones between the normal to the obstacle and the ray.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{3_1.png}
     \caption{Raytracing simulation of a road surrounded by buildings}
     \label{fig:raytracingDemo}
+\end{figure}
+
+The received voltage has been computed on the same setup using equation \ref{eq:voltage_RX} to which the reflection coefficients $\Gamma_{\perp}$ have been added. 
+
+\begin{align*}
+    \Gamma_{\perp} = \frac{\cos \theta_i - \sqrt{\epsilon_r-\sin^2\theta_i}}{\cos \theta_i + \sqrt{\epsilon_r-\sin^2\theta_i}}
+\end{align*}
+
+The voltage carried by each ray is shown in figure \ref{fig:voltageDemo} using a colormap and the exact values are given in table \ref{tab:ray_properties}. The total received voltage is computing by summing the voltages of each ray and taking the phase into account. This gave the following result:
+
+\begin{align*}
+    \text{Total voltage} = 145.6 \mu V \angle -48.8^\circ
+\end{align*}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        Ray Index & Ray physical angle (°) & Ray length (m) & Carried voltage ($\mu V$) & Phase (°) \\ \hline
+        1 & 180.0 & 100.0 & 129.1 & 30.0\\ \hline
+        2 & 174.3 & 100.5 & 114.6 & -81.2\\ \hline
+        3 & -163.3 & 104.4 & 88.9 & -3.7\\ \hline
+        4 & -158.2 & 107.7 & 51.2 & -149.3\\ \hline
+        5 & 158.2 & 107.7 & 51.2 & -149.3\\ \hline
+        6 & 153.4 & 111.8 & 24.9 & 161.93\\ \hline
+        7 & -145.0 & 122.1 & 15.0 & -134.1\\ \hline
+    \end{tabular}
+    \caption{Ray properties: index, angle, length, and voltage amplitude}
+    \label{tab:ray_properties}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{3_2.png}
+    \caption{Received voltage for each ray}
+    \label{fig:voltageDemo}
 \end{figure}
 
 \section{About the simulation}

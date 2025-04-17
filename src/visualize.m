@@ -1,4 +1,4 @@
-function visualize(cfg, rays, legendFull)
+function visualize(cfg, rays, legendMode)
     
     %% Parameters
 
@@ -13,7 +13,6 @@ function visualize(cfg, rays, legendFull)
     building_transparency = cfg.graphical_params.building_transparency;
 
     %% Figure Setup
-    figure;
     hold on;
     axis equal;
     grid off;
@@ -34,10 +33,23 @@ function visualize(cfg, rays, legendFull)
 
     
 
-    colors = lines(size(rays.points, 3)); % Generate distinct colors for each ray
     if isempty(rays.points)
         % no rays to draw
-    else 
+    else
+        if legendMode == 2 && isfield(rays, 'voltages')
+            % Normalize voltages to [0, 1] for colormap
+            voltagesNorm = abs(rays.voltages) / max(abs(rays.voltages));
+            cmap = jet(256); % Use jet colormap
+            colors = interp1(linspace(0, 1, size(cmap, 1)), cmap, voltagesNorm); % Map voltages to colors
+            colormap(cmap); % Set colormap
+            colorbar('eastoutside', 'Ticks', linspace(0, 1, 5), ...
+                     'TickLabels', arrayfun(@(v) sprintf('%.1e V', v), ...
+                     linspace(min(abs(rays.voltages)), max(abs(rays.voltages)), 5), 'UniformOutput', false), ...
+                     'FontSize', 12); % Add colorbar with units in volts
+        else
+            colors = lines(size(rays.points, 3)); % Generate distinct colors for each ray
+        end
+
         for i = 1:size(rays.points, 3)
             ray = rays.points(:, :, i);
             index = 1;
@@ -47,11 +59,15 @@ function visualize(cfg, rays, legendFull)
                 line_y = [ray(index, 2), ray(index+1, 2)];
                 z_pos = [cfg.graphical_params.car_size, cfg.graphical_params.car_size]; % Set z position to car size
                 % Draw the line with a unique color
-                if index == 1
-                    % First line, add to legend
-                    legendHandles = [legendHandles, plot3(line_x, line_y, z_pos, 'Color', colors(i, :), 'LineWidth', 2)];
-                else
+                if legendMode == 2 && isfield(rays, 'voltages')
                     plot3(line_x, line_y, z_pos, 'Color', colors(i, :), 'LineWidth', 2);
+                else
+                    if index == 1
+                        % First line, add to legend
+                        legendHandles = [legendHandles, plot3(line_x, line_y, z_pos, 'Color', colors(i, :), 'LineWidth', 2)];
+                    else
+                        plot3(line_x, line_y, z_pos, 'Color', colors(i, :), 'LineWidth', 2);
+                    end
                 end
                 index = index + 1;
             end
@@ -59,14 +75,22 @@ function visualize(cfg, rays, legendFull)
     end
 
     % Add legend entries for the rays
-    if legendFull
+    if legendMode
         legendEntries = {'TX', 'RX'};
-        anglesCorr = round(180 - mod(rays.angles, 360),2);
-        lengthsCorr = round(rays.lengths,2);
+        anglesCorr = 180 - mod(rays.angles, 360); % No rounding
+        lengthsCorr = rays.lengths; % No rounding
+        if legendMode == 2 && isfield(rays, 'voltages')
+            voltagesCorr = arrayfun(@(v) sprintf('%.1e', v), rays.voltages, 'UniformOutput', false); % Scientific notation with 1 decimals
+        end
         if ~isempty(rays.points)
             % Add legend entries for each ray
             for i = 1:size(rays.points, 3)
-                legendEntries{end+1} = ['Ray ' num2str(i) ' (Angle: ' num2str(anglesCorr(i)) '°, Length: ' num2str(lengthsCorr(i)) ' m)'];
+                if legendMode == 1
+                    % legend contains angle and length
+                    legendEntries{end+1} = ['Ray ' num2str(i) ' (Angle: ' num2str(anglesCorr(i)) '°, Length: ' num2str(lengthsCorr(i)) ' m)'];
+                elseif legendMode == 2
+                    % display a colormap
+                end
             end
         end
         lgd = legend(legendHandles, legendEntries, 'AutoUpdate','off', 'Location','eastoutside', 'FontSize', 15);
