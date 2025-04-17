@@ -1,7 +1,8 @@
-function [rays, angles, lengths] = createRays(cfg)
-    rays = [];
-    angles = [];
-    lengths = [];
+function rays = createRays(cfg)
+    rays = struct();
+    rays.points = [];
+    rays.angles = [];
+    rays.lengths = [];
     raysCnt = 1;
     obstID = zeros(1, cfg.bounce_limit);
 
@@ -42,9 +43,9 @@ function [rays, angles, lengths] = createRays(cfg)
                 end
             end
             if valid
-                rays(:,:,raysCnt) = rayToCheck;
-                angles(raysCnt) = angleToCheck;
-                lengths(raysCnt) = lengthToCheck;
+                rays.points(:,:,raysCnt) = rayToCheck;
+                rays.angles(raysCnt) = angleToCheck;
+                rays.lengths(raysCnt) = lengthToCheck;
                 raysCnt = raysCnt + 1;
             end
         end

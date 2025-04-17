@@ -1,14 +1,6 @@
-function visualize(cfg, rays, angles, lengths)
+function visualize(cfg, rays, legendFull)
     
     %% Parameters
-    
-    legendFull = 1;
-    legendEntries = {};
-    if nargin < 4
-        legendFull = 0; 
-        t = tiledlayout('flow','TileSpacing','compact');
-        nexttile;
-    end
 
     road_width = cfg.environment_params.road_width;          % Width of the road
     road_length = cfg.environment_params.road_length;        % Length of the road
@@ -42,12 +34,12 @@ function visualize(cfg, rays, angles, lengths)
 
     
 
-    colors = lines(size(rays, 3)); % Generate distinct colors for each ray
-    if isempty(rays)
+    colors = lines(size(rays.points, 3)); % Generate distinct colors for each ray
+    if isempty(rays.points)
         % no rays to draw
     else 
-        for i = 1:size(rays, 3)
-            ray = rays(:, :, i);
+        for i = 1:size(rays.points, 3)
+            ray = rays.points(:, :, i);
             index = 1;
             while (index < (cfg.bounce_limit+2) && ~isnan(ray(index+1, 1)))
                 % draw a line between ray(index, :) and ray(index+1, :)
@@ -69,11 +61,11 @@ function visualize(cfg, rays, angles, lengths)
     % Add legend entries for the rays
     if legendFull
         legendEntries = {'TX', 'RX'};
-        anglesCorr = round(180 - mod(angles, 360),2);
-        lengthsCorr = round(lengths,2);
-        if ~isempty(rays)
+        anglesCorr = round(180 - mod(rays.angles, 360),2);
+        lengthsCorr = round(rays.lengths,2);
+        if ~isempty(rays.points)
             % Add legend entries for each ray
-            for i = 1:size(rays, 3)
+            for i = 1:size(rays.points, 3)
                 legendEntries{end+1} = ['Ray ' num2str(i) ' (Angle: ' num2str(anglesCorr(i)) '°, Length: ' num2str(lengthsCorr(i)) ' m)'];
             end
         end

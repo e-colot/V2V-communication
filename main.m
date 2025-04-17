@@ -3,6 +3,6 @@ clear; close all; clc;
 cfg = config(); 
 
 
-[rays, angles, lengths] = createRays(cfg);
+rays = createRays(cfg);
 
-visualize(cfg, rays);
+visualize(cfg, rays, 0);

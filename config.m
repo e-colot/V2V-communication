@@ -37,8 +37,8 @@ function cfg = config()
     cfg.graphical_params.building_transparency = 0.3; % transparency of buildings
     cfg.graphical_params.car_size = 5; % size of the cars
 
-    cfg.TX_pos = [-cfg.environment_params.road_width/4, -50];
-    cfg.RX_pos = [50; -cfg.environment_params.road_width/4];
+    cfg.TX_pos = [-cfg.environment_params.road_width/4, 50];
+    cfg.RX_pos = [50; cfg.environment_params.road_width/4];
     
     cfg.bounce_limit = 3; % bounce limit
 

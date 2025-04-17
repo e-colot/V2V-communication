@@ -9,9 +9,9 @@ cfg.TX_pos = [150; -cfg.environment_params.road_width/4];
 cfg.RX_pos = [50; -cfg.environment_params.road_width/4];
 
 
-[rays, angles, lengths] = createRays(cfg);
+rays = createRays(cfg);
 
-visualize(cfg, rays, angles, lengths);
+visualize(cfg, rays, 1);
 
 xlim([30 170]);
 ylim([-cfg.environment_params.road_width cfg.environment_params.road_width]);
