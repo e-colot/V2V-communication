@@ -5,7 +5,7 @@ function [coord, angle] = intersectVectors(v1, v2)
     n1 = [d1(2), -d1(1)];
     n2 = [d2(2), -d2(1)];
 
-    angle = acos(dot(d1, n2));
+    angle = acos(abs(dot(d1, n2)));
 
     perpDRatio = dot(v1(1,:) - v2(1,:), n1)/dot(d2, n1);
     coord = v2(1,:) + perpDRatio*d2;
