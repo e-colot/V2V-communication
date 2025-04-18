@@ -51,7 +51,10 @@
 
 \begin{center}
     
-    \Huge TODO
+    \Huge TODO\\
+    \vspace{0.5cm}
+    \large Might want to check all 3d plots names\\
+    Write an introduction
     \normalsize
     
 \end{center}
@@ -275,9 +278,31 @@ where $a_n$ is the amplitude of the $n^{th}$ ray with $a_0$ the amplitude of the
     \label{fig:K(d)}
 \end{figure}
 
-\section{About the simulation}
+The average received power in local areas is computed using:
 
-As the road is surrounded by buildings which are assumed to have thick walls, any ray going through a building is considered to be fully attenuated.
+\begin{align*}
+    <P_{RX}> &= \frac{1}{8 Z_a} \sum_{n=1}^{N} \left| V_{OC} \right|^2\\
+    &= \frac{1}{45\pi} \sum_{n=1}^{N} \left| V_{RX} \right|^2\\
+\end{align*}
+
+Where the sum is done over all the received rays. Figure \ref{fig:average_power} shows the average received power in local areas with a width of 5m for an emitter placed at the intersection of the two roads. The power is in dBm as it quicly becomes very small. \\
+Another simulation has been done with 2m wide local areas and an emitter placed a bit further from the intersection. The result is shown in figure \ref{fig:average_power_2m} and it can be clearly seen that it is really difficult to get any power when no LOS ray is present. \\
+It must be mentioned that the simulation does not take any transmission ray into account. This is under the hypothesis that the walls of the buildings are thick enough to not let any ray pass through.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{3_5.png}
+    \caption{Average received power in local areas of 5m}
+    \label{fig:average_power}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{3_5_alt.png}
+    \caption{Average received power in local areas of 2m}
+    \label{fig:average_power_2m}
+\end{figure}
+
 
 %\printglossary
 

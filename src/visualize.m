@@ -1,5 +1,15 @@
 function visualize(cfg, rays, legendMode)
     
+    showCars = 1;
+    if nargin < 2 || isempty(rays)
+        rays.points = [];
+        rays.angles = [];
+        rays.lengths = [];
+        legendMode = 0;
+        showCars = 0;
+    end
+
+
     %% Parameters
 
     road_width = cfg.environment_params.road_width;          % Width of the road
@@ -18,17 +28,18 @@ function visualize(cfg, rays, legendMode)
     grid off;
     xlim([-perp_road_length/2, perp_road_length/2]);
     ylim([-road_length/2, road_length/2]);
-    zlim([0, max_building_height + 2]);
+    %zlim([0, max_building_height + 2]);
     xlabel('X-axis (m)');
     ylabel('Y-axis (m)');
     zlabel('Z-axis (m)');
 
     %% Place Cars
-    legendHandles = []; % Initialize an array to store handles for legend
+    if showCars
+        legendHandles = []; % Initialize an array to store handles for legend
 
-    legendHandles = [legendHandles, scatter3(cfg.TX_pos(1), cfg.TX_pos(2), cfg.graphical_params.car_size, 200, 'r', 'filled')]; % Red car (left lane)
-    legendHandles = [legendHandles, scatter3(cfg.RX_pos(1), cfg.RX_pos(2), cfg.graphical_params.car_size, 200, 'b', 'filled')];   % Blue car (left lane)
-
+        legendHandles = [legendHandles, scatter3(cfg.TX_pos(1), cfg.TX_pos(2), cfg.graphical_params.car_size, 200, 'r', 'filled')]; % Red car (left lane)
+        legendHandles = [legendHandles, scatter3(cfg.RX_pos(1), cfg.RX_pos(2), cfg.graphical_params.car_size, 200, 'b', 'filled')];   % Blue car (left lane)
+    end
     %% Draw Rays
 
     
