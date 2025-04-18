@@ -21,6 +21,7 @@
 \usepackage{listings}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{fancyvrb}
+\usepackage{graphicx}
 
 \usepackage{xstring}
 \usepackage{etoolbox}
@@ -209,7 +210,7 @@ After having implemented a raytracing algorithm, the simulation is able to compu
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{3_1.png}
+    \includegraphics[width=1\textwidth]{3_1.eps}
     \caption{Raytracing simulation of a road surrounded by buildings}
     \label{fig:raytracingDemo}
 \end{figure}
@@ -245,7 +246,7 @@ The voltage carried by each ray is shown in figure \ref{fig:voltageDemo} using a
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{3_2.png}
+    \includegraphics[width=0.8\textwidth]{3_2.eps}
     \caption{Received voltage for each ray}
     \label{fig:voltageDemo}
 \end{figure}
@@ -254,7 +255,7 @@ By varying the distance between the two communicating cars between 0 and 1000m, 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{3_3.png}
+    \includegraphics[width=1\textwidth]{3_3.eps}
     \caption{Received power as a function of the distance between the two cars}
     \label{fig:P_RX(d)}
 \end{figure}
@@ -273,7 +274,7 @@ where $a_n$ is the amplitude of the $n^{th}$ ray with $a_0$ the amplitude of the
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{3_4.png}
+    \includegraphics[width=1\textwidth]{3_4.eps}
     \caption{Rice factor as a function of the distance between the two cars}
     \label{fig:K(d)}
 \end{figure}
@@ -291,16 +292,42 @@ It must be mentioned that the simulation does not take any transmission ray into
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{3_5.png}
+    \includegraphics[width=1\textwidth]{3_5.eps}
     \caption{Average received power in local areas of 5m}
     \label{fig:average_power}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{3_5_alt.png}
+    \includegraphics[width=1\textwidth]{3_5_alt.eps}
     \caption{Average received power in local areas of 2m}
     \label{fig:average_power_2m}
+\end{figure}
+
+The pass loss of the channel is defined (with every term in dB) as:
+
+\begin{align*}
+    L(d) = P_{TX} - P_{RX} 
+\end{align*}
+
+$L_0$ can then be defined as the pass loss that does not depend on the antennas. The canonical model for it is:
+
+\begin{align*}
+    L_0(d) &= L(d) + 10 log_{10} G_{TX} + 10 log_{10} G_{RX} \\
+    &= L_0(d_0) + 10 n log_{10} \left(\frac{d}{d_0}\right)
+\end{align*}
+
+In which the parameters $L_0$ and $n$ must be found to fit the values of the simulation. $d_0$ has been arbitrarily set to 1m. The result is shown in figure \ref{fig:pass_loss} and the resulting parameters give as path loss model:
+
+\begin{align*}
+    L_0(d) = 58.501 + 10 \cdot 1.56 \cdot log_{10} \left(\frac{d}{1\text{m}}\right)
+\end{align*}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{3_5_model.eps}
+    \caption{Pass loss of the channel and fitted model}
+    \label{fig:pass_loss}
 \end{figure}
 
 

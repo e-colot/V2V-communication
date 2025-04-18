@@ -46,6 +46,6 @@ grid on;
 
 theoreticalPower = cfg.transmit_params.TX_power * 16/(9 * pi^2) * (cfg.transmit_params.c ./ (cfg.transmit_params.fc*pi*distance)).^2; % theoretical voltage decay
 semilogy(distance, theoreticalPower, 'LineWidth', 2);
-legend('Simulated Power', 'Theoretical Power', 'FontSize', 18);
+legend('Simulated Power', 'Theoretical Power');
 hold off;
 
