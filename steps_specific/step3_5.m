@@ -126,6 +126,12 @@ hold off;
 disp('Estimated model:');
 disp(['L_0(d) = ', num2str(params(1)), ' + ' num2str(params(2)), '*10*log(d)']);
 
+
+%% 3.6
+% sigma_l is the standard deviation of the experimental path loss around the fitted one
+sigma_l = std(L_0 - (params(1) + params(2)*10*log10(d)));
+disp(['Estimated variability: sigma_l = ', num2str(sigma_l)]);
+
 function plot3DCube(x, y, height, color, width)
     % Define the vertices of the cube
     vertices = [
