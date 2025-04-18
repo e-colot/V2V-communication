@@ -258,7 +258,22 @@ By varying the distance between the two communicating cars between 0 and 1000m, 
 
 For short distances, the LOS ray is the only one contributing to the received power which explains the good match of the simulation with theory. \\
 After a few meters, the multi path components (MPC) start to have an impact on the received power and the resulting interferences make the simulated power oscillate around the true power. \\
-At greater distances and because of the limited number of bounces, one can clearly see the power is a multisine signal. This is because the reflection angles don't vary much with the distance at that point.
+At greater distances and because of the limited number of bounces, one can clearly see the power is a multisine signal. This is because the reflection angles don't vary much with the distance at that point.\\
+
+The oscillation around the expected power can be modeled with a Rice distribution as the LOS ray is the strongest one. The Rice factor $K$ is defined as the ratio between the power of the LOS ray and the power of the other rays:
+
+\begin{align*}
+    K = \frac{a_0^2}{\sum_{n=1}^{N}a_n^2}
+\end{align*}
+
+where $a_n$ is the amplitude of the $n^{th}$ ray with $a_0$ the amplitude of the LOS ray. As those amplitudes vary with distance, figure \ref{fig:K(d)} shows the rice factor as a function of the distance between the two cars. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{3_4.png}
+    \caption{Rice factor as a function of the distance between the two cars}
+    \label{fig:K(d)}
+\end{figure}
 
 \section{About the simulation}
 
