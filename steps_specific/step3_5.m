@@ -79,7 +79,7 @@ cbar.Ticks = linspace(0, 1, 5); % Set ticks for normalized values
 cbar.TickLabels = arrayfun(@(v) sprintf('%.2f dBm', v), linspace(min(logPower(:)), max(logPower(:)), 5), 'UniformOutput', false);
 cbar.Label.String = 'Average Power (dBm)';
 title('Average Power Distribution in the Road Area', 'FontSize', 18);
-view(140, 45);
+view(-40, 45);
 
 %% path loss model
 
