@@ -70,7 +70,7 @@
     \label{fig:equivalent_electrical_circuit}
 \end{figure}
 
-Fig \ref{fig:equivalent_electrical_circuit} shows the equivalent electrical circuit at RX and TX where $\underline{V}_{oc}$ is the induced voltage, $\underline{V}_{RX}$ the voltage at the output of the RX antenna, $\underline{V}_{TX}$ at the input of the TX antenna and $\underline{I}_{a}$ the current entering the TX antenna.\\
+Fig \ref{fig:equivalent_electrical_circuit} shows the equivalent electrical circuit at RX and TX where $\underline{V}_{oc}$ is the induced voltage, $\underline{V}_{\text{RX}}$ the voltage at the output of the RX antenna, $\underline{V}_{\text{TX}}$ at the input of the TX antenna and $\underline{I}_{a}$ the current entering the TX antenna.\\
 
 As both transmitting and receiving antenna are vertical $\lambda/2$ dipoles, their equivalent heights can be analytically computed:
 
@@ -98,26 +98,26 @@ To make the transmission parameters appear in the electric field expression, $\b
 
 \begin{gather*}
     \beta = \frac{2\pi f_c}{c}\\
-    \underline{V}_{TX} = (Z_a + Z_S) \underline{I}_a = \frac{720\pi}{16} \underline{I}_a
+    \underline{V}_{\text{TX}} = (Z_a + Z_S) \underline{I}_a = \frac{720\pi}{16} \underline{I}_a
 \end{gather*}
 
 Wich yields
 
 \begin{align*}
     \underline{\vec{E}} &= j \frac{120\pi\underline{I}_a}{2\pi} \frac{e^{-\frac{j2\pi f_c r}{c}}}{r} \vec{1_{\theta}}\\
-    &= j \frac{4\underline{V}_{TX}}{3\pi} \frac{e^{-\frac{j2\pi f_c r}{c}}}{r} \vec{1_{\theta}}
+    &= j \frac{4\underline{V}_{\text{TX}}}{3\pi} \frac{e^{-\frac{j2\pi f_c r}{c}}}{r} \vec{1_{\theta}}
 \end{align*}
 
 The last step is to replace the travel distance $r$ with $c \tau$ as the wave is propagating at the speed of light in free space. The electric field thus becomes:
 
 \begin{align*}
-    \underline{\vec{E}} &= j \frac{4 \underline{V}_{TX}}{3\pi} \frac{e^{-j2\pi f_c \tau}}{c\tau} \vec{1_{\theta}}
+    \underline{\vec{E}} &= j \frac{4 \underline{V}_{\text{TX}}}{3\pi} \frac{e^{-j2\pi f_c \tau}}{c\tau} \vec{1_{\theta}}
 \end{align*}
 
-The voltage at the output of the antenna $\underline{V}_{RX}$ can be deduced from the equivalent electric circuit \ref{fig:equivalent_electrical_circuit} as it is a simple voltage divider. Assuming a matching between the antenna and the load, we have:
+The voltage at the output of the antenna $\underline{V}_{\text{RX}}$ can be deduced from the equivalent electric circuit \ref{fig:equivalent_electrical_circuit} as it is a simple voltage divider. Assuming a matching between the antenna and the load, we have:
 
 \begin{align*}
-    \underline{V}_{RX} = \frac{Z_L}{Z_a + Z_L} \underline{V}_{oc} = \frac{1}{2} \underline{V}_{oc}\\
+    \underline{V}_{\text{RX}} = \frac{Z_L}{Z_a + Z_L} \underline{V}_{oc} = \frac{1}{2} \underline{V}_{oc}\\
     \underline{V}_{oc} = -\left . \vec{h}_{e\perp}(\theta, \phi)\right\vert_{\theta = \pi/2} \cdot \underline{\vec{E}}_i
 \end{align*}
 
@@ -125,14 +125,14 @@ Where $\underline{\vec{E}}_i = - \underline{\vec{E}}$ due to the change of coord
 
 \begin{align*}
     \underline{V}_{oc} &= \frac{\lambda}{\pi} \cdot \underline{E}_i\\
-    &= -j\frac{4  \lambda \underline{V}_{TX}}{3\pi^2}\frac{e^{-j 2\pi f_c \tau}}{c\tau}\\
-    \underline{V}_{RX} &= -j\frac{2  \lambda }{3\pi^2}\frac{e^{-j 2\pi f_c \tau}}{c\tau}\underline{V}_{TX}
+    &= -j\frac{4  \lambda \underline{V}_{\text{TX}}}{3\pi^2}\frac{e^{-j 2\pi f_c \tau}}{c\tau}\\
+    \underline{V}_{\text{RX}} &= -j\frac{2  \lambda }{3\pi^2}\frac{e^{-j 2\pi f_c \tau}}{c\tau}\underline{V}_{\text{TX}}
 \end{align*}
 
 For a practical use in step 3, the time of flight $\tau$ is replaced by the traveled distance $d$ to get:
 
 \begin{align}
-    \underline{V}_{RX} &= -j\frac{2 \lambda }{3\pi^2}\frac{e^{-j\frac{2\pi f_c d}{c}}}{d}\underline{V}_{TX}
+    \underline{V}_{\text{RX}} &= -j\frac{2 \lambda }{3\pi^2}\frac{e^{-j\frac{2\pi f_c d}{c}}}{d}\underline{V}_{\text{TX}}
     \label{eq:voltage_RX}
 \end{align}
 
@@ -159,7 +159,7 @@ As we consider a single ray, the narrowband model of the channel $h_{NB}$ (repre
     h_{NB} = \frac{e^{-j \frac{2\pi f_cd_1}{c}}}{d_1}
 \end{align*}
 
-The ratio between the received power $P_{RX}$ and the transmitted power $P_{TX}$ is found with:
+The ratio between the received power $P_{\text{RX}}$ and the transmitted power $P_{\text{TX}}$ is found with:
 
 \begin{align}
     \frac{P_{\text{received}}}{P_{\text{transmitted}}} &= \frac{\left| h(\tau) \right|^2}{2} \nonumber\\
@@ -170,30 +170,30 @@ The ratio between the received power $P_{RX}$ and the transmitted power $P_{TX}$
 This result can be compared with the Friis formula, given by:
 
 \begin{align}
-    P_{RX}(d) = P_{TX} G_{TX}(\theta_{TX}, \phi_{TX})G_{RX}(\theta_{RX}, \phi_{RX})\left(\frac{\lambda}{4\pi d}\right)^2
+    P_{\text{RX}}(d) = P_{\text{TX}} G_{\text{TX}}(\theta_{\text{TX}}, \phi_{\text{TX}})G_{\text{RX}}(\theta_{\text{RX}}, \phi_{\text{RX}})\left(\frac{\lambda}{4\pi d}\right)^2
     \label{eq:friis_formula}
 \end{align}
 
-The reason for the big difference between the two formulas can be easily explained: in eq \ref{eq:power_approx}, $P_{\text{transmitted}}$ and $P_{\text{received}}$ are the powers of the waves, not the one of the signal before/after passing through the antennas. To correct it, they are replaced by the Poynting vectors $\bm{\vec{\mathscr{S}}}_{TX}$ and $\bm{\vec{\mathscr{S}}}_{RX}$:
+The reason for the big difference between the two formulas can be easily explained: in eq \ref{eq:power_approx}, $P_{\text{transmitted}}$ and $P_{\text{received}}$ are the powers of the waves, not the one of the signal before/after passing through the antennas. To correct it, they are replaced by the Poynting vectors $\bm{\vec{\mathscr{S}}}_{\text{TX}}$ and $\bm{\vec{\mathscr{S}}}_{\text{RX}}$:
 
 \begin{align}
-    \frac{\left|\bm{\vec{\mathscr{S}}}_{RX}\right|}{\left|\bm{\vec{\mathscr{S}}}_{TX}\right|} = \frac{1}{d_1^2}
+    \frac{\left|\bm{\vec{\mathscr{S}}}_{\text{RX}}\right|}{\left|\bm{\vec{\mathscr{S}}}_{\text{TX}}\right|} = \frac{1}{d_1^2}
     \label{eq:poynting}
 \end{align}
 
 To compare the received and the injected power, the Poynting vectors should be replaced by
 
 \begin{align*}
-    \left|\bm{\vec{\mathscr{S}}}_{TX}\right| = G_{TX} P_{TX}\\
-    \left|\bm{\vec{\mathscr{S}}}_{RX}\right| A_{eRX} = P_{RX}\\
-    \text{where} \quad \quad A_{eRX} = G_{RX}\left(\frac{\lambda}{4\pi}\right)^2
+    \left|\bm{\vec{\mathscr{S}}}_{\text{TX}}\right| = G_{\text{TX}} P_{\text{TX}}\\
+    \left|\bm{\vec{\mathscr{S}}}_{\text{RX}}\right| A_{eRX} = P_{\text{RX}}\\
+    \text{where} \quad \quad A_{eRX} = G_{\text{RX}}\left(\frac{\lambda}{4\pi}\right)^2
 \end{align*}
 
 When placed back in eq \ref{eq:poynting}, the expression matches the Friis formula (eq \ref{eq:friis_formula}). \\
 To further simplify and as the antennas are considered to be lossless dipoles, equation \ref{eq:power_friis_simplified} replaces their gain by $\frac{16}{3\pi}$, the theoretical gain of such antennas.
 
 \begin{align}
-    \frac{P_{RX}}{P_{TX}} &= G_{TX} G_{RX} \left(\frac{\lambda}{4\pi d_1}\right)^2\\
+    \frac{P_{\text{RX}}}{P_{\text{TX}}} &= G_{\text{TX}} G_{\text{RX}} \left(\frac{\lambda}{4\pi d_1}\right)^2\\
     \label{eq:power_friis_simplified}
     &= \frac{16}{9\pi^2} \left(\frac{\lambda}{\pi d_1}\right)^2
 \end{align}
@@ -282,8 +282,8 @@ where $a_n$ is the amplitude of the $n^{th}$ ray with $a_0$ the amplitude of the
 The average received power in local areas is computed using:
 
 \begin{align*}
-    <P_{RX}> &= \frac{1}{8 Z_a} \sum_{n=1}^{N} \left| V_{OC} \right|^2\\
-    &= \frac{1}{45\pi} \sum_{n=1}^{N} \left| V_{RX} \right|^2\\
+    <P_{\text{RX}}> &= \frac{1}{8 Z_a} \sum_{n=1}^{N} \left| V_{OC} \right|^2\\
+    &= \frac{1}{45\pi} \sum_{n=1}^{N} \left| V_{\text{RX}} \right|^2\\
 \end{align*}
 
 Where the sum is done over all the received rays. Figure \ref{fig:average_power} shows the average received power in local areas with a width of 5m for an emitter placed at the intersection of the two roads. The power is in dBm as it quicly becomes very small. \\
@@ -304,17 +304,17 @@ It must be mentioned that the simulation does not take any transmission ray into
     \label{fig:average_power_2m}
 \end{figure}
 
-The pass loss of the channel is defined (with every term in dB) as:
+The pass loss of the channel $L(d)$ and the pass loss that does not depend on the antennas $L_0(d)$ are defined (with every term in dB) as:
 
 \begin{align*}
-    L(d) = P_{TX} - P_{RX} 
+    L(d) &= P_{\text{TX}} - P_{\text{RX}}\\
+    L_0(d) &= L(d) + G_{\text{TX}} + G_{\text{RX}}
 \end{align*}
 
-$L_0$ can then be defined as the pass loss that does not depend on the antennas. The canonical model for it is:
+The canonical model for $L_0(d)$ is:
 
 \begin{align*}
-    L_0(d) &= L(d) + 10 log_{10} G_{TX} + 10 log_{10} G_{RX} \\
-    &= L_0(d_0) + 10 n log_{10} \left(\frac{d}{d_0}\right)
+    L_0(d) = L_0(d_0) + 10 n log_{10} \left(\frac{d}{d_0}\right)
 \end{align*}
 
 In which the parameters $L_0$ and $n$ must be found to fit the values of the simulation. $d_0$ has been arbitrarily set to 1m. The result is shown in figure \ref{fig:pass_loss} and the resulting parameters give as path loss model:
@@ -339,10 +339,16 @@ As the LLS estimator only gives a "\textit{best fit}" to the data, there is stil
 Regarding the communication reliability, it can be found under the assumption that the power variations due to shadowing is log-normal distributed. In this case, the probability of a successful communication is given by:
 
 \begin{align*}
-    \text{Pr} = \frac{1}{2} \text{erfc}\left(\frac{M}{\sigma_L}\sqrt{2}\right) 
+    P_{\text{success}} = \frac{1}{2} \text{erfc}\left(\frac{M}{\sigma_L}\sqrt{2}\right) 
 \end{align*}
 
-Where $M$ is the fade margin, defined as the difference between the received power and the minimum power needed to decode the signal. The fade margins required for a certain communication reliability are given in table \ref{tab:fade_margins}. They have been found by plotting the error probability as a function of the fade margin (see figure \ref{fig:fade_margin}).
+Where $M$ is the fade margin, defined as the difference between the received power and the minimum power needed to decode the signal. The fade margins required for a certain communication reliability are given in table \ref{tab:fade_margins}. They have been found by plotting the error probability as a function of the fade margin (see figure \ref{fig:fade_margin}). The cell range can also be computed for each value of $P_{\text{success}}$ based on:
+
+\begin{align*}
+    L(d) &= P_{\text{TX}} - P_{\text{RX}}\\
+    L_0(d_\text{max}) &= P_{\text{TX}} - P_{RX, \text{min}} + G_{\text{TX}} + G_{\text{RX}}\\
+    58.501 + 10 \cdot 1.56 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= P_{\text{TX}} - P_{RX, \text{min}} + G_{\text{TX}} + G_{\text{RX}}
+\end{align*}
 
 \begin{table}[H]
     \centering
