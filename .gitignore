@@ -44,3 +44,6 @@
 test.m
 .VSCodeCounter
 *.asv
+
+# except .eps in ./report/pic
+!report/pic/*.eps

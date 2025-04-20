@@ -55,13 +55,14 @@
     \Huge TODO\\
     \vspace{0.5cm}
     \large Might want to check all 3d plots names\\
-    Write an introduction
+    Write an introduction\\
+    Resize figures to fill pages
     \normalsize
     
 \end{center}
 \chapter{Theoretical answers}
 
-\section{Step 1}
+\section{$\lambda/2$ antennas}
 
 \begin{figure}[H]
     \centering
@@ -136,7 +137,7 @@ For a practical use in step 3, the time of flight $\tau$ is replaced by the trav
     \label{eq:voltage_RX}
 \end{align}
 
-\section{Step 2}
+\section{LOS channel}
 
 Assuming the communication takes place via a LOS ray only, the channel impulse response $h(\tau)$ is defined as follows:
 
@@ -204,7 +205,8 @@ Two deductions can be made of this result:
     \item A more surprising result is the wavelength squared appearing at the numerator. It shows that there is always a compromise between data rate and power consumption as a larger wavelength will indeed be less attenuated but the maximal data rate will then be lowered in order for the channel to still be considered as narrowband.
 \end{itemize}
 
-\section{Step 3}
+\chapter{Simulation results}
+\section{Raytracing}
 
 After having implemented a raytracing algorithm, the simulation is able to compute every path from the transmitter to the receiver. Figure \ref{fig:raytracingDemo} shows the result of the simulation for cars spaced by 100m on a 20m wide road surrounded by buildings. For a better understanding, the angles are computed between the buildings and the rays. This is only done on this graph as the angles used to compute the reflection coefficients $\Gamma_{\perp}$ are the ones between the normal to the obstacle and the ray.
 
@@ -250,6 +252,8 @@ The voltage carried by each ray is shown in figure \ref{fig:voltageDemo} using a
     \caption{Received voltage for each ray}
     \label{fig:voltageDemo}
 \end{figure}
+
+\section{Power analysis}
 
 By varying the distance between the two communicating cars between 0 and 1000m, a comparison is made between the raytracing simulation and the theoretical model on figure \ref{fig:P_RX(d)}. The simulated power is computed by taking the square of $V_{OC}$ divided by $Z_L \mathbin{\|} Z_a$ (see figure \ref{fig:equivalent_electrical_circuit}) and the theoretical power is computed using equation \ref{eq:power_friis_simplified}.
 
@@ -304,12 +308,18 @@ It must be mentioned that the simulation does not take any transmission ray into
     \label{fig:average_power_2m}
 \end{figure}
 
+\section{Full channel, narrowband model}
+
 The pass loss of the channel $L(d)$ and the pass loss that does not depend on the antennas $L_0(d)$ are defined (with every term in dB) as:
 
-\begin{align*}
-    L(d) &= P_{\text{TX}} - P_{\text{RX}}\\
-    L_0(d) &= L(d) + G_{\text{TX}} + G_{\text{RX}}
-\end{align*}
+
+\begin{subequations}
+    \label{eq:pass_loss}
+    \begin{align}
+        L(d) &= P_{\text{TX}} - P_{\text{RX}}\\
+        L_0(d) &= L(d) + G_{\text{TX}} + G_{\text{RX}}
+    \end{align}
+\end{subequations}
 
 The canonical model for $L_0(d)$ is:
 
@@ -319,9 +329,10 @@ The canonical model for $L_0(d)$ is:
 
 In which the parameters $L_0$ and $n$ must be found to fit the values of the simulation. $d_0$ has been arbitrarily set to 1m. The result is shown in figure \ref{fig:pass_loss} and the resulting parameters give as path loss model:
 
-\begin{align*}
+\begin{align}
+    \label{eq:pass_loss_model}
     L_0(d) = 58.501 + 10 \cdot 1.56 \cdot log_{10} \left(\frac{d}{1\text{m}}\right)
-\end{align*}
+\end{align}
 
 \begin{figure}[H]
     \centering
@@ -342,7 +353,7 @@ Regarding the communication reliability, it can be found under the assumption th
     P_{\text{success}} = \frac{1}{2} \text{erfc}\left(\frac{M}{\sigma_L}\sqrt{2}\right) 
 \end{align*}
 
-Where $M$ is the fade margin, defined as the difference between the received power and the minimum power needed to decode the signal. The fade margins required for a certain communication reliability are given in table \ref{tab:fade_margins}. They have been found by plotting the error probability as a function of the fade margin (see figure \ref{fig:fade_margin}). The cell range can also be computed for each value of $P_{\text{success}}$ based on:
+Where $M$ is the fade margin, defined as the difference between the received power and the minimum power needed to decode the signal. The fade margins required for a certain communication reliability are given in table \ref{tab:fade_margins}. They have been found by plotting the error probability as a function of the fade margin (see figure \ref{fig:fade_margin}). The cell range can also be computed for each value of $P_{\text{success}}$ using equation \ref{eq:pass_loss} and \ref{eq:pass_loss_model}. 
 
 \begin{align*}
     L(d) &= P_{\text{TX}} - P_{\text{RX}}\\
@@ -369,6 +380,9 @@ Where $M$ is the fade margin, defined as the difference between the received pow
     \caption{Fade margin as a function of the communication reliability}
     \label{fig:fade_margin}
 \end{figure}
+
+\section{LOS channel, wideband model}
+
 
 %\printglossary
 

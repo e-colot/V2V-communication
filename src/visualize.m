@@ -31,7 +31,6 @@ function visualize(cfg, rays, legendMode)
     %zlim([0, max_building_height + 2]);
     xlabel('X-axis (m)');
     ylabel('Y-axis (m)');
-    zlabel('Z-axis (m)');
 
     %% Place Cars
     if showCars
@@ -196,7 +195,7 @@ function visualize(cfg, rays, legendMode)
     title('Road');
     rotate3d on; % Enable rotation
     set(gca, 'CameraViewAngleMode', 'manual'); % Prevent displacement
-    %set(gca,'XTick',[],'YTick',[],'ZTick',[])
+    set(gca, 'ZTick', []); % Remove z-axis numbering
 
     hold off;
 end
