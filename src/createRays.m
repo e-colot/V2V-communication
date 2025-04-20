@@ -7,7 +7,7 @@ function rays = createRays(cfg)
     raysCnt = 1;
     obstID = zeros(1, cfg.bounce_limit);
 
-    while(norm(obstID - ones(1, cfg.bounce_limit) * length(cfg.obstacles)) ~= 0)
+    while(1)
         % create the ray path (virtual antenna to virtual antenna)
         ray = nan(cfg.bounce_limit+2, 2);
         ray(1,:) = cfg.TX_pos';
@@ -55,6 +55,10 @@ function rays = createRays(cfg)
 
         % update obstID
         % used to get the obstacles for the next ray
+        if (norm(obstID - ones(1, cfg.bounce_limit) * length(cfg.obstacles)) == 0)
+            % if all the rays have been created
+            break;
+        end
         valid = 0;
         while(~valid)
             j = length(obstID);
