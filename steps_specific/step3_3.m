@@ -35,17 +35,20 @@ end
 % P_RX = V_OC^2 / (Z_a + Z_L)
 %      = (2*V_RX)^2 / (Z_a + Z_L)
 simulatedPower = (2*receivedVoltage).^2 / (720 * pi / 16);
+simulatedPowerdBm = 10*log10(simulatedPower / 1e-3);
 
 figure;
-semilogy(distance, simulatedPower, 'LineWidth', 2);
+semilogx(distance, simulatedPowerdBm, 'LineWidth', 2);
 xlabel('Distance (m)');
-ylabel('Received Power (W)');
+ylabel('Received Power (dBm)');
 title('Received Power vs Distance');
 hold on;
 grid on;
 
 theoreticalPower = cfg.transmit_params.TX_power * 16/(9 * pi^2) * (cfg.transmit_params.c ./ (cfg.transmit_params.fc*pi*distance)).^2; % theoretical voltage decay
-semilogy(distance, theoreticalPower, 'LineWidth', 2);
+theoreticalPowerdBm = 10*log10(theoreticalPower / 1e-3); % convert to dBm
+
+semilogx(distance, theoreticalPowerdBm, 'LineWidth', 2);
 legend('Simulated Power', 'Theoretical Power');
 hold off;
 
