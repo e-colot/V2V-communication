@@ -138,14 +138,15 @@ For a practical use in step 3, the time of flight $\tau$ is replaced by the trav
 \end{align}
 
 \section{LOS channel}
+\label{sec:LOS_channel}
 
 Assuming the communication takes place via a LOS ray only, the channel impulse response $h(\tau)$ is defined as follows:
 
 \begin{align*}
-    h(\tau) = \frac{\alpha_1 e^{-j\frac{2\pi f_cd_1}{c}}}{d_1} \delta(\tau - \frac{d_1}{c})
+    h(\tau) = \frac{\alpha_1 e^{-j\frac{2\pi f_cd_1}{c}}}{d_1} \delta\left(\tau - \tau_1\right)
 \end{align*}
 
-Where $d_1$ the distance of propagation of the direct ray. $\alpha_1$ (which might be complex) takes into account a phase change or attenuation due for example to reflections whereas the imaginary exponential next to it corresponds to the phase change due to the propagation delay. In the case of LOS transmission $\alpha_1$ is equal to 1.\\
+Where $d_1$ is the distance of propagation and $\tau_1$ he propagation delay of the direct ray. $\alpha_1$ (which might be complex) takes into account a phase change or attenuation due for example to reflections whereas the imaginary exponential next to it corresponds to the phase change due to the propagation delay. In the case of LOS transmission $\alpha_1$ is equal to 1.\\
 The transfer function $H(f)$ of the channel is found by taking the Fourier transform of $h(\tau)$
 
 \begin{align*}
@@ -154,12 +155,23 @@ The transfer function $H(f)$ of the channel is found by taking the Fourier trans
     &= \frac{e^{-j \frac{2\pi (f+f_c)d_1}{c}}}{d_1}\\
 \end{align*}
 
-As we consider a single ray, the narrowband model of the channel $h_{NB}$ (representing the case where the receiver perceives the sum of all propagation path) is simply found by removing the Dirac pulse from $h(\tau)$
+% FALSE ???
+% As we consider a single ray, the narrowband model of the channel $h_{\text{NB}}$ (representing the case where the receiver perceives the sum of all propagation path) is simply found by removing the Dirac pulse from $h(\tau)$
 
-\begin{align*}
-    h_{NB} = \frac{e^{-j \frac{2\pi f_cd_1}{c}}}{d_1}
-\end{align*}
+% \begin{align*}
+%     h_{\text{NB}} = \frac{e^{-j \frac{2\pi f_cd_1}{c}}}{d_1}
+% \end{align*}
 
+The narrowband impulse response of the channel $h_{\text{NB}}(\tau)$ is, in the case of a single ray, simply equal to $h(\tau$) and the signal received at the output of the channel $y(t)$ is given by:
+
+\begin{equation*}
+    y(t) = h_{\text{NB}}(t) x(t)
+\end{equation*}
+\begin{equation*}
+    \text{where} \qquad h_{\text{NB}}(t) = h(t) = \frac{e^{-j \frac{2\pi f_cd_1}{c}}}{d_1} \delta(t - \tau_1)
+\end{equation*}
+
+Where $x(t)$ is the transmitted signal. \\
 The ratio between the received power $P_{\text{RX}}$ and the transmitted power $P_{\text{TX}}$ is found with:
 
 \begin{align}
@@ -383,6 +395,79 @@ Where $M$ is the fade margin, defined as the difference between the received pow
 
 \section{LOS channel, wideband model}
 
+For the wideband model and if there is only a single ray, the impulse response of the channel is given by:
+
+\begin{equation*}
+    h(t) = \frac{e^{-j \frac{2\pi f_cd_1}{c}}}{d_1} \delta(t - \tau_1)
+\end{equation*}
+
+The impulse response and the corresponding transfer function (computed by taking the DFT of $h(t)$) are shown in figure \ref{fig:impulse_response} and \ref{fig:transfer_function}. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{4_1_temp.eps}
+    \caption{Impulse response of the wideband channel with the LOS ray only} 
+    \label{fig:impulse_response}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{4_1_freq.eps}
+    \caption{Transfer function of the wideband channel with the LOS ray only}
+    \label{fig:transfer_function}
+\end{figure}
+
+The impulse response is a single peak at a time corresponding to the time of flight of the LOS ray. The transfer function has a constant value over the frequency spectrum. This means that there is no frequency selectivity for a single ray, a result easily understandable as no frequency is less attenuated than another in free space. This is of course valid only because some assumptions have been made: there is no multipath propagation and no parasitic effects (gaseous absorption, rain attenuation, tropospheric scintillation, etc.).\\
+Because of the limitted bandwidth of the channel, the tapped delay line model is used to compute $h_{\text{TDL}}(t)$. The previous impulse response did not take into the fact that the receiver is only able to sample at the time resolution of the system $\Delta\tau = \frac{1}{B}$, where B is its bandwidth. The TDL model is found by:
+
+\begin{equation}
+    h_{\text{TDL}}(t) = \sum_{l=0}^{L} h_l(t) \delta(t - l\Delta\tau)
+    \label{eq:h_TDL}
+\end{equation}
+\begin{equation*}
+    \text{where} \qquad h_l(t) = \sum_{n=1}^{N} \alpha_n(t) \text{sinc}\left(B(\tau_n - l\Delta\tau)\right)
+\end{equation*}
+
+In those equations, $L$ is the maximal index of the temporal taps (linked with the maximal allowed delay) and $N$ is the number of rays, which is simply $1$ in this case. $\alpha_1$ is different from the one defined in section \ref{sec:LOS_channel}, as it here takes the spacial dispersion into account:
+
+\begin{equation*}
+    \alpha_n = \prod_{b=1}^{B} \Gamma_{\perp, b} \cdot \frac{e^{\frac{-j2\pi f_c d_n}{c}}}{d_n} \qquad \text{where } B \text{ is the number of bounces of the } n^{th} \text{ ray}
+\end{equation*}
+
+When all of it is put together in equation \ref{eq:h_TDL}, the impulse response of the channel becomes:
+
+\begin{equation*}
+    h_{\text{TDL}}(t) = \sum_{l=0}^{L}\frac{e^{\frac{-j2\pi f_c d_1}{c}}}{d_1} \text{sinc}\left(B(\tau_1 - l\Delta\tau)\right) \delta(t - l\Delta\tau)
+\end{equation*}
+
+On figure \ref{fig:h_TDL_LOS}, the effect of the sinc function is clearly visible: the impulse response is no longer a single peak but the adjacent time bins (of size $\Delta\tau$) are now different from zero. This is because the receiver is not able to sample the signal at the exact time of flight of the ray. \\
+
+\vspace{0.5cm}
+\Large \textbf{More explanations needed}
+\normalsize\\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{4_2.eps}
+    \caption{TDL impulse response of the wideband channel with the LOS ray only}
+    \label{fig:h_TDL_LOS}
+\end{figure}
+
+\section{Full channel, wideband model}
+
+
+
+
+
+
+
+
+\chapter{Further analysis}
+\begin{itemize}
+    \item Take back step 4.1 and show coherence bandwidth vs distance to see whether the narrowband analysis is valid or not.
+    \item try to do the whole analysis for different scenarios
+    \item 3d plot with (distance, frequency, $|H(f)|$)
+\end{itemize}
 
 %\printglossary
 

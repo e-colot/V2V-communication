@@ -27,11 +27,10 @@ disp(['RF bandwidth: ' num2str(round(cfg.transmit_params.BW / 1e6)) ' MHz']);
 
 % construction of h(t)
 T = 15e-6; % time window
-t = 0:1e-10:T;
+t = 0:1/cfg.transmit_params.BW:T;
 h = zeros(1, length(t));
 for i = 1:length(alpha)
-    closestBin = find(t >= timeOfFlight(i), 1);
-    h(closestBin) = h(closestBin) + alpha(i);
+    h = h + alpha(i) * sinc(cfg.transmit_params.BW * (t - timeOfFlight(i)));
 end
 
 figure;
@@ -39,43 +38,25 @@ plot(t*1e6, abs(h), 'LineWidth', 2);
 hold on;
 xlabel('Time (ns)');
 ylabel('Amplitude');
-title('Impulse Response |h(t)|');
+title('Impulse Response |h_{TDL}(t)|');
 grid on;
 xlim([t(1) t(end)]*1e6);
 ylim([-max(abs(h))/5 max(abs(h))*6/5]);
 
-% construction of H(f)
 
-f = -(length(t)-1)/(2*T):1/T:(length(t)-1)/(2*T);
-H = fftshift(fft(h));
 
-figure;
+%% construction of H(f)
 
-% Top left: Amplitude response
-% subplot(2, 2, 1);
-plot(f*1e-9, abs(H), 'LineWidth', 2);
-xlabel('Frequency (GHz)');
-ylabel('Amplitude');
-title('Frequency Response |H(f)|');
-grid on;
-ylim([-max(abs(H))/5 max(abs(H))*6/5]);
+% f = -(length(t)-1)/(2*T):1/T:(length(t)-1)/(2*T);
+% H = fftshift(fft(h));
 
-% % Top right: Phase response
-% subplot(2, 2, 2);
-% plot(f*1e-9, angle(H), 'LineWidth', 2);
-% xlabel('Frequency (GHz)');
-% ylabel('Phase (rad)');
-% title('Phase Response \angle H(f)');
+% figure;
+% plot(f*1e-6, abs(H), 'LineWidth', 2);
+% xlabel('Frequency (MHz)');
+% ylabel('Amplitude');
+% title('Frequency Response |H(f)|');
 % grid on;
-
-% % Bottom: zoomed-in view of the phase response
-% subplot(2, 2, [3, 4]);
-% plot(f(1:100)*1e-9, angle(H(1:100)), 'LineWidth', 2);
-% xlabel('Frequency (GHz)');
-% ylabel('Phase (rad)');
-% title('Phase Response \angle H(f) - zoomed in');
-% grid on;
-
+% ylim([-max(abs(H))/5 max(abs(H))*6/5]);
 
 
 
