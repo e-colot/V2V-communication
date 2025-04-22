@@ -22,3 +22,4 @@ This project focuses on Vehicle-to-Vehicle (V2V) communication, exploring the th
 - What is the influence on speed. Is it simply a shift in $$f_c$$ depending on the angle of the ray?
 - As the maximal frequency of $$H(f)$$ is $$100$$ MHz, is the channel selective to a passband or a baseband frequency range (*step 5*)?
 - How to interpret the fact that $$h_{\text{TDL}}(t)$$ is non zero even before the ray has traveled the distance?
+- Is $$H_{\text{TDL}}(f)$$ of some interest?

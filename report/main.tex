@@ -394,6 +394,7 @@ Where $M$ is the fade margin, defined as the difference between the received pow
 \end{figure}
 
 \section{LOS channel, wideband model}
+\label{sec:LOS_channel_wideband}
 
 For the wideband model and if there is only a single ray, the impulse response of the channel is given by:
 
@@ -455,10 +456,42 @@ On figure \ref{fig:h_TDL_LOS}, the effect of the sinc function is clearly visibl
 
 \section{Full channel, wideband model}
 
+This section will do the same analysis as the previous one but for multiple rays. The impulse response and the corresponding transfer function are shown in figure \ref{fig:impulse_response_full} and \ref{fig:transfer_function_full}. \\
+The impulse response plot is zoomed in so the different peaks are visible. Because of those peaks, some frequencies are more attenuated than others during their propagation through the channel. This is the reason why the transfer function is not constant anymore. \\
+The transfer function plot is also only partially shown in order to focus around the carrier frequency $f_c = 5.9$GHz. This analysis shows that this choice for $f_c$ is not optimal as the amplitude of $H(f)$ is low around this frequency. A wiser choice would have been to choose a frequency around $f_c = 6.5$GHz. Even though the transfer function is not maximal there, it does not vary much around it whereas a change of only $10$ MHz above $5.9$GHz could diminish the amplitude of the transfer function by half.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{5_1.eps}
+    \caption{Impulse response of the wideband channel with multiple rays}
+    \label{fig:impulse_response_full}
+\end{figure}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{5_2.eps}
+    \caption{Transfer function of the wideband channel with multiple rays}
+    \label{fig:transfer_function_full}
+\end{figure}
 
+The impulse response of the tapped delay line model is computed using the same method as in section \ref{sec:LOS_channel_wideband} and it is plotted together with the one in with the LOS ray only on figure \ref{fig:impulse_response_TDL}. 
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{comparison_h_TDL.eps}
+    \caption{Comparison of $h_{\text{TDL}}$ for the LOS ray only and the full channel}
+    \label{fig:impulse_response_TDL}
+\end{figure}
+
+Taking the MPC into account makes $h_{\text{TDL}}$ reach a higher value than the one with the LOS ray only. Because the bandwidth of the channel is lower than the coherence bandwidth (defined as the inverse of the delay between the first and last incoming ray), all the rays are arriving approximately at the same time. \\
+To verify this, the same script has been used with 15 bounces instead of 3. The coherence bandwidth decreased from $123$MHz to as low as $6$MHz. The impulse response is shown on figure \ref{fig:impulse_response_TDL_15_bounces} and separate peaks are now visible.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{5_3_15_bounces.eps}
+    \caption{Impulse response of the wideband channel with multiple rays and 15 bounces}
+    \label{fig:impulse_response_TDL_15_bounces}
+\end{figure}
 
 
 
