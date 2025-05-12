@@ -254,7 +254,7 @@ The voltage carried by each ray is shown in figure \ref{fig:voltageDemo} using a
         6 & 153.4 & 111.8 & 24.9 & 161.93\\ \hline
         7 & -145.0 & 122.1 & 15.0 & -134.1\\ \hline
     \end{tabular}
-    \caption{Ray properties: index, angle, length, and voltage amplitude}
+    \caption{Ray properties: index, angle, length, and voltage amplitude. The physical angle is measured between the ray and the road direction.}
     \label{tab:ray_properties}
 \end{table}
 
@@ -361,11 +361,13 @@ As the LLS estimator only gives a "\textit{best fit}" to the data, there is stil
 
 Regarding the communication reliability, it can be found under the assumption that the power variations due to shadowing is log-normal distributed. In this case, the probability of a successful communication is given by:
 
-\begin{align*}
+\begin{equation}
+    \label{eq:pass_loss_probability}
     P_{\text{success}} = \frac{1}{2} \text{erfc}\left(\frac{M}{\sigma_L}\sqrt{2}\right) 
-\end{align*}
+\end{equation}
 
-Where $M$ is the fade margin, defined as the difference between the received power and the minimum power needed to decode the signal. The fade margins required for a certain communication reliability are given in table \ref{tab:fade_margins}. They have been found by plotting the error probability as a function of the fade margin (see figure \ref{fig:fade_margin}). The cell range can also be computed for each value of $P_{\text{success}}$ using equation \ref{eq:pass_loss} and \ref{eq:pass_loss_model}. 
+Where $M$ is the fade margin, defined as the difference between the received power and the minimum power needed to decode the signal. The fade margins required for a certain communication reliability are given in table \ref{tab:fade_margins}. They have been found by plotting the error probability as a function of the fade margin (see figure \ref{fig:fade_margin}). \\
+The cell range can also be computed for each value of $P_{\text{success}}$ using equation \ref{eq:pass_loss} and \ref{eq:pass_loss_model}. 
 
 \begin{align*}
     L(d) &= P_{\text{TX}} - P_{\text{RX}}\\
@@ -373,23 +375,31 @@ Where $M$ is the fade margin, defined as the difference between the received pow
     58.501 + 10 \cdot 1.56 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= P_{\text{TX}} - P_{RX, \text{min}} + G_{\text{TX}} + G_{\text{RX}}
 \end{align*}
 
+The minimal received power $P_{RX, \text{min}}$ is the receiver sensitivity to which the fade margin is added. Putting the values of the left parameters in the equation gives:
+
+\begin{align*}
+    58.501 + 10 \cdot 1.56 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= 100 - (-70 + M) + 2 \times 10 \log_{10} \left(\frac{16}{3\pi}\right)\\
+    \log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= \frac{116.1 - M}{15.6}\\
+    d_{\text{max}} &= 10^{\frac{116.1 - M}{15.6}} \left[\text{m}\right]
+\end{align*}
+
 \begin{table}[H]
     \centering
     \begin{tabular}{|c|c|c|}
         \hline
-        Communication reliability & Fade margin (dB) & Cell range (m) \\ \hline
+        Communication reliability & Fade margin (dB) & Cell radius (m) \\ \hline
         50\% & 0 & \textbf{??}\\ \hline
         95\% & 0.4973 & \textbf{??}\\ \hline
         99\% & 0.7033 & \textbf{??}\\ \hline
     \end{tabular}
-    \caption{Fade margins for different communication reliability}
+    \caption{Fade margins and cell radius for different communication reliability}
     \label{tab:fade_margins}
 \end{table}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{3_7.eps}
-    \caption{Fade margin as a function of the communication reliability}
+    \caption{Fade margin as a function of the communication reliability, plotted using equation \ref{eq:pass_loss_probability}}
     \label{fig:fade_margin}
 \end{figure}
 
