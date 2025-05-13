@@ -26,7 +26,7 @@ for i = 1:length(distance)
     rays = createRays(cfg);
     rays.voltages = rayVoltage(rays, cfg); % calculate the voltages
 
-    LOSPower(i) = norm(rays.voltages(1)); 
+    LOSPower(i) = norm(rays.voltages(1).^2); 
     MPCPower(i) = norm(sum(rays.voltages(2:end).^2));
 end
 
