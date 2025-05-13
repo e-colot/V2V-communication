@@ -343,7 +343,7 @@ In which the parameters $L_0$ and $n$ must be found to fit the values of the sim
 
 \begin{align}
     \label{eq:pass_loss_model}
-    L_0(d) = 58.501 + 10 \cdot 1.56 \cdot log_{10} \left(\frac{d}{1\text{m}}\right)
+    L_0(d) = 58.501 + 15.6 \cdot log_{10} \left(\frac{d}{1\text{m}}\right)
 \end{align}
 
 \begin{figure}[H]
@@ -355,15 +355,15 @@ In which the parameters $L_0$ and $n$ must be found to fit the values of the sim
 
 As the LLS estimator only gives a "\textit{best fit}" to the data, there is still a parameter to define: the variability $\sigma_L$. It is the standard deviation of the path loss around the fitted model and its value here is:
 
-\begin{align*}
+\begin{equation*}
     \sigma_L = 0.30236 \quad \text{dB}
-\end{align*}
+\end{equation*}
 
 Regarding the communication reliability, it can be found under the assumption that the power variations due to shadowing is log-normal distributed. In this case, the probability of a successful communication is given by:
 
 \begin{equation}
     \label{eq:pass_loss_probability}
-    P_{\text{success}} = \frac{1}{2} \text{erfc}\left(\frac{M}{\sigma_L}\sqrt{2}\right) 
+    P_{\text{success}} = \frac{1}{2} \text{erfc}\left(\frac{M}{\sigma_L\sqrt{2}}\right) 
 \end{equation}
 
 Where $M$ is the fade margin, defined as the difference between the received power and the minimum power needed to decode the signal. The fade margins required for a certain communication reliability are given in table \ref{tab:fade_margins}. They have been found by plotting the error probability as a function of the fade margin (see figure \ref{fig:fade_margin}). \\
@@ -372,13 +372,13 @@ The cell range can also be computed for each value of $P_{\text{success}}$ using
 \begin{align*}
     L(d) &= P_{\text{TX}} - P_{\text{RX}}\\
     L_0(d_\text{max}) &= P_{\text{TX}} - P_{RX, \text{min}} + G_{\text{TX}} + G_{\text{RX}}\\
-    58.501 + 10 \cdot 1.56 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= P_{\text{TX}} - P_{RX, \text{min}} + G_{\text{TX}} + G_{\text{RX}}
+    58.501 + 15.6 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= P_{\text{TX}} - P_{RX, \text{min}} + G_{\text{TX}} + G_{\text{RX}}
 \end{align*}
 
 The minimal received power $P_{RX, \text{min}}$ is the receiver sensitivity to which the fade margin is added. Putting the values of the left parameters in the equation gives:
 
 \begin{align*}
-    58.501 + 10 \cdot 1.56 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= 100 - (-70 + M) + 2 \times 10 \log_{10} \left(\frac{16}{3\pi}\right)\\
+    58.501 + 15.6 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= 100 - (-70 + M) + 2 \times 10 \log_{10} \left(\frac{16}{3\pi}\right)\\
     \log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= \frac{116.1 - M}{15.6}\\
     d_{\text{max}} &= 10^{\frac{116.1 - M}{15.6}} \left[\text{m}\right]
 \end{align*}
