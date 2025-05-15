@@ -291,9 +291,11 @@ where $a_n$ is the amplitude of the $n^{th}$ ray with $a_0$ the amplitude of the
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{3_4.eps}
-    \caption{Rice factor as a function of the distance between the two cars}
+    \caption{Rice factor as a function of the distance between the two cars. The highlighted point is the distance from which the LOS ray is not the strongest one anymore.}
     \label{fig:K(d)}
 \end{figure}
+
+The Rice factor is a good indicator of the portion of the power that is due to the LOS ray. The point at which it becomes smaller than 1 (or 0dB) is the point at which the power due to the LOS ray is equal to the sum of the power of the other rays. The Rice factor close to the emitter is high, which indicates that the fading is low. the Rice factor becomes smaller after only a few meters and, as seen in figure \ref{fig:P_RX(d)}, the received power oscillates around the expected value. This is the fading effect.\\
 
 The average received power in local areas is computed using:
 
@@ -378,9 +380,9 @@ The cell range can also be computed for each value of $P_{\text{success}}$ using
 The minimal received power $P_{RX, \text{min}}$ is the receiver sensitivity to which the fade margin is added. Putting the values of the left parameters in the equation gives:
 
 \begin{align*}
-    58.501 + 15.6 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= 100 - (-70 + M) + 2 \times 10 \log_{10} \left(\frac{16}{3\pi}\right)\\
-    \log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= \frac{116.1 - M}{15.6}\\
-    d_{\text{max}} &= 10^{\frac{116.1 - M}{15.6}} \left[\text{m}\right]
+    58.501 + 15.6 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= 20 - (-70 + M) + 2 \times 10 \log_{10} \left(\frac{16}{3\pi}\right)\\
+    \log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= \frac{36.1 - M}{15.6}\\
+    d_{\text{max}} &= 10^{\frac{36.1 - M}{15.6}} \left[\text{m}\right]
 \end{align*}
 
 \begin{table}[H]
@@ -388,9 +390,9 @@ The minimal received power $P_{RX, \text{min}}$ is the receiver sensitivity to w
     \begin{tabular}{|c|c|c|}
         \hline
         Communication reliability & Fade margin (dB) & Cell radius (m) \\ \hline
-        50\% & 0 & \textbf{??}\\ \hline
-        95\% & 0.4973 & \textbf{??}\\ \hline
-        99\% & 0.7033 & \textbf{??}\\ \hline
+        50\% & 0 & 205.98 \\ \hline
+        95\% & 0.497 & 191.41 \\ \hline
+        99\% & 0.703 & 185.68 \\ \hline
     \end{tabular}
     \caption{Fade margins and cell radius for different communication reliability}
     \label{tab:fade_margins}

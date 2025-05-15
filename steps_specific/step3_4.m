@@ -27,7 +27,7 @@ for i = 1:length(distance)
     rays.voltages = rayVoltage(rays, cfg); % calculate the voltages
 
     LOSPower(i) = norm(rays.voltages(1).^2); 
-    MPCPower(i) = norm(sum(rays.voltages(2:end).^2));
+    MPCPower(i) = sum(norm(rays.voltages(2:end).^2));
 end
 
 % visualize(cfg, rays, 2);
@@ -39,8 +39,11 @@ end
 K = LOSPower ./ MPCPower;
 
 figure;
-plot(distance, 10*log10(K), 'LineWidth', 1.5);
-xlabel('Distance (m)');
+p = plot(distance, 10*log10(K), 'LineWidth', 1.5);
+hold on;
+% Add a data tip close to 10*log10(K) = 0
+[~, idx] = min(abs(10*log10(K))); % Find the index closest to 0 dB
+datatip(p, distance(idx), 10*log10(K(idx)), 'Location', 'northwest');
 ylabel('Rice Factor (K) [dB]');
 title('Rice Factor (K) vs Distance');
 grid on;
