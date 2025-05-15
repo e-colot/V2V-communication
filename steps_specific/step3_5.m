@@ -5,41 +5,49 @@ clear; close all; clc;
 
 cfg = config(); 
 
+cfg.bounce_limit = 6;
+cfg.local_area_len = 5;
+
+
 x = (-cfg.environment_params.road_length+cfg.environment_params.local_area_len)/2:cfg.environment_params.local_area_len:(cfg.environment_params.road_length-cfg.environment_params.local_area_len)/2;
 y = (-cfg.environment_params.road_width+cfg.environment_params.local_area_len)/2:cfg.environment_params.local_area_len:(cfg.environment_params.road_width-cfg.environment_params.local_area_len)/2;
 
-cfg.TX_pos = [0; 0];
+cfg.TX_pos = [25; 0];
 
 avgPower = zeros(length(x), length(y)); % initialize power matrix
 distance = zeros(length(x), length(y)); % initialize distance matrix
 avgPowerPerp = zeros(length(y), length(x)); % initialize power matrix
 distancePerp = zeros(length(y), length(x)); % initialize distance matrix
 
+hWait = waitbar(0, 'Processing...'); % Initialize waitbar
 for xi = 1:length(x)
     for yi = 1:length(y)
-        cfg.RX_pos = [x(xi); y(yi)];
-        distance(xi, yi) = norm(cfg.RX_pos - cfg.TX_pos); % calculate distance
+        cfg_local = cfg; % Create a local copy of cfg for each worker
+        cfg_local.RX_pos = [x(xi); y(yi)];
+        distance(xi, yi) = norm(cfg_local.RX_pos - cfg_local.TX_pos); % calculate distance
 
-        rays = createRays(cfg);
-        rays.voltages = rayVoltage(rays, cfg); % calculate the voltages
+        rays = createRays(cfg_local);
+        rays.voltages = rayVoltage(rays, cfg_local); % calculate the voltages
 
         avgPower(xi, yi) = sum(abs(rays.voltages).^2)/(45*pi);
         if avgPower(xi, yi) == 0
             avgPower(xi, yi) = NaN; % avoid log(0)
         end
 
-        cfg.RX_pos = [y(yi); x(xi)];
-        distancePerp(yi, xi) = norm(cfg.RX_pos - cfg.TX_pos); % calculate distance
+        cfg_local.RX_pos = [y(yi); x(xi)];
+        distancePerp(yi, xi) = norm(cfg_local.RX_pos - cfg_local.TX_pos); % calculate distance
 
-        rays = createRays(cfg);
-        rays.voltages = rayVoltage(rays, cfg); % calculate the voltages
+        rays = createRays(cfg_local);
+        rays.voltages = rayVoltage(rays, cfg_local); % calculate the voltages
 
         avgPowerPerp(yi, xi) = sum(abs(rays.voltages).^2)/(45*pi);
         if avgPowerPerp(yi, xi) == 0
             avgPowerPerp(yi, xi) = NaN; % avoid log(0)
         end
     end
+    waitbar(xi / length(x), hWait); % Update waitbar
 end
+close(hWait); % Close waitbar
 
 % Normalize the log of avgPower
 logPower = 10*log10(avgPower);

@@ -1,7 +1,7 @@
 clear; close all; clc;
 
-sigma = 0.30236;
-x = -1:1e-3:10;
+sigma = 12.7679;
+x = -1:1e-3:50;
 y = 1/2 * erfc(x./(sigma*sqrt(2)));
 
 figure;
