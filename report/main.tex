@@ -114,6 +114,7 @@ The last step is to replace the travel distance $r$ with $c \tau$ as the wave is
 
 \begin{equation*}
     \underline{\vec{E}}(\vec{r}) = j \frac{\underline{V}_{\text{TX}}}{2\pi}\frac{Z_0}{Z_a + Z_S} \frac{e^{-j2\pi f_c \tau}}{c\tau} \vec{1_{\theta}}
+    \label{eq:emitted_electric_field}
 \end{equation*}
 
 The voltage at the output of the antenna $\underline{V}_{\text{RX}}$ can be deduced from the equivalent electric circuit \ref{fig:equivalent_electrical_circuit} as it is a simple voltage divider. Assuming matching impedances between the antenna and the load, we have:
@@ -123,18 +124,18 @@ The voltage at the output of the antenna $\underline{V}_{\text{RX}}$ can be dedu
     \underline{V}_{oc} = -\left . \vec{h}_{e\perp}(\theta, \phi)\right\vert_{\theta = \pi/2} \cdot \underline{\vec{E}}_i
 \end{align*}
 
-Where $\underline{\vec{E}}_i = - \underline{\vec{E}}$ due to the change of coordinates origin. It is here assumed that there was no reflexion, refraction or transmission through another material. This allows to find the votages at the receiver side as a function of the voltage at the transmitter side.
+Where $\underline{\vec{E}}_i$ is the incoming electric field which is equal to the radiated field in \ref{eq:emitted_electric_field}. It is here assumed that there was no reflexion, refraction or transmission through another material. This allows to find the votages at the receiver side as a function of the voltage at the transmitter side.
 
 \begin{align*}
     \underline{V}_{oc} &= \frac{\lambda}{\pi} \cdot \underline{E}_i\\
-    &= -j\frac{\lambda\underline{V}_{\text{TX}}}{2\pi^2}\frac{Z_0}{Z_a + Z_S}\frac{e^{-j 2\pi f_c \tau}}{c\tau}\\
-    \underline{V}_{\text{RX}} &= -j\frac{\lambda}{4\pi^2}\frac{Z_0}{Z_a + Z_S}\frac{e^{-j 2\pi f_c \tau}}{c\tau} \underline{V}_{\text{TX}}
+    &= j\frac{\lambda\underline{V}_{\text{TX}}}{2\pi^2}\frac{Z_0}{Z_a + Z_S}\frac{e^{-j 2\pi f_c \tau}}{c\tau}\\
+    \underline{V}_{\text{RX}} &= j\frac{\lambda}{4\pi^2}\frac{Z_0}{Z_a + Z_S}\frac{e^{-j 2\pi f_c \tau}}{c\tau} \underline{V}_{\text{TX}}
 \end{align*}
 
 For later use, the time of flight $\tau$ is replaced by the traveled distance $d$, which is more convenient for the simulation. $Z_0$, $Z_a$, and $Z_S$ can also be replaced by $120\pi$, $\frac{720\pi}{32}$, and $\frac{720\pi}{32}$, respectively (assuming once again that the impedances are matched).\\
 
 \begin{align}
-    \underline{V}_{\text{RX}} &= -j\frac{2 \lambda }{3\pi^2}\frac{e^{-j\frac{2\pi f_c d}{c}}}{d}\underline{V}_{\text{TX}}
+    \underline{V}_{\text{RX}} &= j\frac{2 \lambda }{3\pi^2}\frac{e^{-j\frac{2\pi f_c d}{c}}}{d}\underline{V}_{\text{TX}}
     \label{eq:voltage_RX}
 \end{align}
 
@@ -188,7 +189,7 @@ This result can be compared with the Friis formula, given by:
     \label{eq:friis_formula}
 \end{align}
 
-The reason for the big difference between the two formulas can be easily explained: in eq \ref{eq:power_approx}, $P_{\text{transmitted}}$ and $P_{\text{received}}$ are the powers of the waves, not the one of the signal before/after passing through the antennas. To correct it, they are replaced by the Poynting vectors $\bm{\vec{\mathscr{S}}}_{\text{TX}}$ and $\bm{\vec{\mathscr{S}}}_{\text{RX}}$:
+The reason for the big difference between the two formulas can be easily explained: in eq \ref{eq:power_approx}, $P_{\text{transmitted}}$ and $P_{\text{received}}$ are the power of the emitted and received electric fields, not the one of the signal before/after passing through the antennas. To correct it, they are replaced by the Poynting vectors $\bm{\vec{\mathscr{S}}}_{\text{TX}}$ and $\bm{\vec{\mathscr{S}}}_{\text{RX}}$:
 
 \begin{align}
     \frac{\left|\bm{\vec{\mathscr{S}}}_{\text{RX}}\right|}{\left|\bm{\vec{\mathscr{S}}}_{\text{TX}}\right|} = \frac{1}{d_1^2}
@@ -204,7 +205,7 @@ To compare the received and the injected power, the Poynting vectors should be r
 \end{align*}
 
 When placed back in eq \ref{eq:poynting}, the expression matches the Friis formula (eq \ref{eq:friis_formula}). \\
-To further simplify and as the antennas are considered to be lossless dipoles, equation \ref{eq:power_friis_simplified} replaces their gain by $\frac{16}{3\pi}$, the theoretical gain of such antennas.
+To further simplify and as the antennas are considered to be lossless dipoles, equation \ref{eq:power_friis_simplified} replaces their gain by $\frac{16}{3\pi}$, the theoretical gain of vertical half-wave dipoles in the horizontal plane.
 
 \begin{align}
     \frac{P_{\text{RX}}}{P_{\text{TX}}} &= G_{\text{TX}} G_{\text{RX}} \left(\frac{\lambda}{4\pi d_1}\right)^2\\
@@ -215,7 +216,7 @@ To further simplify and as the antennas are considered to be lossless dipoles, e
 Two deductions can be made of this result: 
 \begin{itemize}
     \item The power loss on the channel depends on the square of the distance between the emitter and the receiver. It implies that doubling the range of an antenna would need a multiplication of the transmitting power by a factor 4.
-    \item A more surprising result is the wavelength squared appearing at the numerator. It shows that there is always a compromise between data rate and power consumption as a larger wavelength will indeed be less attenuated but the maximal data rate will then be lowered in order for the channel to still be considered as narrowband.
+    \item A more surprising result is the wavelength squared appearing at the numerator. It shows that there is always a compromise between data rate and power consumption as a larger wavelength will indeed be less attenuated but the maximal data rate will then be lowered because of the decreased transmission frequency.
 \end{itemize}
 
 \chapter{Simulation results}
