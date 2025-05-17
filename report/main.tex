@@ -67,20 +67,20 @@
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{circuit.png}
-    \caption{Equivalent electric circuit of an antenna in RX (left) and TX (right)}
+    \caption{Equivalent electric circuit of the RX antenna (left) and the TX antenna (right)}
     \label{fig:equivalent_electrical_circuit}
 \end{figure}
 
-Fig \ref{fig:equivalent_electrical_circuit} shows the equivalent electrical circuit at RX and TX where $\underline{V}_{oc}$ is the induced voltage, $\underline{V}_{\text{RX}}$ the voltage at the output of the RX antenna, $\underline{V}_{\text{TX}}$ at the input of the TX antenna and $\underline{I}_{a}$ the current entering the TX antenna.\\
+Fig \ref{fig:equivalent_electrical_circuit} shows the equivalent electrical circuit at RX and TX where $\underline{V}_{oc}$ is the induced voltage, $\underline{V}_{\text{RX}}$ the voltage at the output of the RX antenna, $\underline{V}_{\text{TX}}$ the one at the input of the TX antenna and $\underline{I}_{a}$ the current entering the TX antenna.\\
 
-As both transmitting and receiving antenna are vertical $\lambda/2$ dipoles, their equivalent heights can be analytically computed:
+As both antennas are vertical $\lambda/2$ dipoles, their equivalent heights can be analytically computed:
 
 \begin{align*}
-    \vec{h}_e (\theta, \phi) = \frac{\lambda}{\pi} \frac{\cos(\frac{1}{2}\cos \theta)}{\sin ^2 \theta}\vec{1_z}\\
-    \vec{h}_{e\perp} (\theta, \phi) = -\frac{\lambda}{\pi} \frac{\cos(\frac{\pi}{2}\cos \theta)}{\sin \theta}\vec{1_\theta}
+    \vec{h}_e (\theta, \phi) = \frac{\lambda}{\pi} \frac{\cos\left(\frac{1}{2}\cos \theta\right)}{\sin ^2 \theta}\vec{1_z}\\
+    \vec{h}_{e\perp} (\theta, \phi) = -\frac{\lambda}{\pi} \frac{\cos\left(\frac{\pi}{2}\cos \theta\right)}{\sin \theta}\vec{1_\theta}
 \end{align*}
 
-As $\theta$ and $\phi$ are spherical coordinates, the horizontal plane (in which the simulation is done) corresponds to $\theta = \pi/2$. The transverse equivalent height is then reduced to hte following, where it does not depend on the azimuthal angle $\phi$:
+Where $\theta$ and $\phi$ are respectively the polar and the azimuthal angles. This means that the horizontal plane (in which the rays in the simulation propagating) corresponds to $\theta = \pi/2$. The transverse equivalent height is then reduced to the following, where it does not depend on the azimuthal angle $\phi$:
 
 \begin{align*}
     \vec{h}_{e\perp} (\phi) = -\frac{\lambda}{\pi} \vec{1_{\theta}}\\
@@ -89,48 +89,49 @@ As $\theta$ and $\phi$ are spherical coordinates, the horizontal plane (in which
 The transverse part of the equivalent height gives rise to an expression for the emitted electric field.
 
 \begin{align*}
-    \underline{\vec{E}} &= -j\omega \underline{I}_a \frac{\mu_0}{4\pi}\frac{e^{-j\beta r}}{r}\vec{h}_{e\perp}(\theta, \phi) \\
+    \underline{\vec{E}}(\vec{r}) &= -j\omega \underline{I}_a \frac{\mu_0}{4\pi}\frac{e^{-j\beta r}}{r}\vec{h}_{e\perp}(\theta, \phi) \\
     &= j\omega \underline{I}_a \frac{\mu_0\lambda}{4\pi^2}\frac{e^{-j\beta r}}{r} \vec{1_{\theta}} \\
     &= j \frac{\underline{I}_a \mu_0 c}{2\pi} \frac{e^{-j\beta r}}{r} \vec{1_{\theta}}\\
     &= j \frac{\underline{I}_a Z_0}{2\pi} \frac{e^{-j\beta r}}{r} \vec{1_{\theta}}
 \end{align*}
 
-To make the transmission parameters appear in the electric field expression, $\beta$ and $\underline{I}_a$ must be replaced with the formulas given below. $Z_0$, $Z_a$, $Z_S$ can also be replaced by respectively $120\pi$, $\frac{720\pi}{32}$ and $\frac{720\pi}{32}$ (assuming the impedances are matching).
+To make the transmission parameters appear in the electric field expression, $\beta$ and $\underline{I}_a$ must be replaced with the formulas given below.
 
-\begin{gather*}
-    \beta = \frac{2\pi f_c}{c}\\
-    \underline{V}_{\text{TX}} = (Z_a + Z_S) \underline{I}_a = \frac{720\pi}{16} \underline{I}_a
-\end{gather*}
+\begin{equation*}
+    \beta = \frac{2\pi f_c}{c}
+\end{equation*}
+\begin{equation*}
+    \underline{V}_{\text{TX}} = (Z_a + Z_S) \underline{I}_a
+\end{equation*}
 
 Wich yields
 
-\begin{align*}
-    \underline{\vec{E}} &= j \frac{120\pi\underline{I}_a}{2\pi} \frac{e^{-\frac{j2\pi f_c r}{c}}}{r} \vec{1_{\theta}}\\
-    &= j \frac{4\underline{V}_{\text{TX}}}{3\pi} \frac{e^{-\frac{j2\pi f_c r}{c}}}{r} \vec{1_{\theta}}
-\end{align*}
+\begin{equation*}
+    \underline{\vec{E}}(\vec{r}) = j \frac{\underline{V}_{\text{TX}}}{2\pi}\frac{Z_0}{Z_a + Z_S} \frac{e^{-\frac{j2\pi f_c r}{c}}}{r} \vec{1_{\theta}}
+\end{equation*}
 
 The last step is to replace the travel distance $r$ with $c \tau$ as the wave is propagating at the speed of light in free space. The electric field thus becomes:
 
-\begin{align*}
-    \underline{\vec{E}} &= j \frac{4 \underline{V}_{\text{TX}}}{3\pi} \frac{e^{-j2\pi f_c \tau}}{c\tau} \vec{1_{\theta}}
-\end{align*}
+\begin{equation*}
+    \underline{\vec{E}}(\vec{r}) = j \frac{\underline{V}_{\text{TX}}}{2\pi}\frac{Z_0}{Z_a + Z_S} \frac{e^{-j2\pi f_c \tau}}{c\tau} \vec{1_{\theta}}
+\end{equation*}
 
-The voltage at the output of the antenna $\underline{V}_{\text{RX}}$ can be deduced from the equivalent electric circuit \ref{fig:equivalent_electrical_circuit} as it is a simple voltage divider. Assuming a matching between the antenna and the load, we have:
+The voltage at the output of the antenna $\underline{V}_{\text{RX}}$ can be deduced from the equivalent electric circuit \ref{fig:equivalent_electrical_circuit} as it is a simple voltage divider. Assuming matching impedances between the antenna and the load, we have:
 
 \begin{align*}
     \underline{V}_{\text{RX}} = \frac{Z_L}{Z_a + Z_L} \underline{V}_{oc} = \frac{1}{2} \underline{V}_{oc}\\
     \underline{V}_{oc} = -\left . \vec{h}_{e\perp}(\theta, \phi)\right\vert_{\theta = \pi/2} \cdot \underline{\vec{E}}_i
 \end{align*}
 
-Where $\underline{\vec{E}}_i = - \underline{\vec{E}}$ due to the change of coordinates origin. It is here assumed that there was no reflexion, refraction or transmission through another material. This results in:
+Where $\underline{\vec{E}}_i = - \underline{\vec{E}}$ due to the change of coordinates origin. It is here assumed that there was no reflexion, refraction or transmission through another material. This allows to find the votages at the receiver side as a function of the voltage at the transmitter side.
 
 \begin{align*}
     \underline{V}_{oc} &= \frac{\lambda}{\pi} \cdot \underline{E}_i\\
-    &= -j\frac{4  \lambda \underline{V}_{\text{TX}}}{3\pi^2}\frac{e^{-j 2\pi f_c \tau}}{c\tau}\\
-    \underline{V}_{\text{RX}} &= -j\frac{2  \lambda }{3\pi^2}\frac{e^{-j 2\pi f_c \tau}}{c\tau}\underline{V}_{\text{TX}}
+    &= -j\frac{\lambda\underline{V}_{\text{TX}}}{2\pi^2}\frac{Z_0}{Z_a + Z_S}\frac{e^{-j 2\pi f_c \tau}}{c\tau}\\
+    \underline{V}_{\text{RX}} &= -j\frac{\lambda}{4\pi^2}\frac{Z_0}{Z_a + Z_S}\frac{e^{-j 2\pi f_c \tau}}{c\tau} \underline{V}_{\text{TX}}
 \end{align*}
 
-For a practical use in step 3, the time of flight $\tau$ is replaced by the traveled distance $d$ to get:
+For later use, the time of flight $\tau$ is replaced by the traveled distance $d$, which is more convenient for the simulation. $Z_0$, $Z_a$, and $Z_S$ can also be replaced by $120\pi$, $\frac{720\pi}{32}$, and $\frac{720\pi}{32}$, respectively (assuming once again that the impedances are matched).\\
 
 \begin{align}
     \underline{V}_{\text{RX}} &= -j\frac{2 \lambda }{3\pi^2}\frac{e^{-j\frac{2\pi f_c d}{c}}}{d}\underline{V}_{\text{TX}}
@@ -528,6 +529,9 @@ As one can see, the power is now much less homogeneous than in the previous case
     \text{with } \sigma_L &= 12.7679 \quad \text{dB}
 \end{align*}
 
+\huge Redo with only the perpendicular points maybe?\\
+\normalsize 
+
 The data points in figure \ref{fig:pass_loss_2} can be split in two groups: the points with a lower path loss, that stay close to the Friis model, and the points with a higher path loss. The first group corresponds to the positions on the same road as the transmitter and the values are quiet close to the ones in figure \ref{fig:pass_loss}. \\
 The second group corresponds to the cars on the perpendicular road. Those have a much higher pass loss as a lot of rays are absorbed by the buildings. The fitted model being minimizing the least square error for the whole dataset, it is unable to properly fit to the data points. This is easily measured by the standard deviation which is, in this case, 40 times higher than the one computed previously. \\
 
@@ -538,7 +542,9 @@ The second group corresponds to the cars on the perpendicular road. Those have a
     \label{fig:pass_loss_2}
 \end{figure}
 
-This change in the model implies also a change in the cell radius. A table with the fade margins and the cell radius is shown below. Because the variability is much higher, the range of the cell radius is rapidly decreasing when the communication reliability becomes higher. \\
+\section{Communication reliability}
+
+The change in the model implies that the cell radius must be recomputed. A table with the fade margins and the cell radius is shown below. Because the variability is much higher, the range of the cell radius is rapidly decreasing when the communication reliability becomes higher. \\
 
 \begin{table}[H]
     \centering
