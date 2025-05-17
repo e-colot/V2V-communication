@@ -6,15 +6,15 @@ clear; close all; clc;
 cfg = config(); 
 
 cfg.environment_params.road_length = 2000;
-distance = 1000; % m distance between TX and RX
+distance = 500; % m distance between TX and RX
 cfg.obstacles = createObstacles(cfg); % recompute obstacles
 
 tmp_obstacles(:, :, 1) = cfg.obstacles(:, :, 6);
 tmp_obstacles(:, :, 2) = cfg.obstacles(:, :, 8);
 cfg.obstacles = tmp_obstacles;
 
-cfg.TX_pos = [0; -cfg.environment_params.road_width/4];
-cfg.RX_pos = [distance; -cfg.environment_params.road_width/4];
+cfg.TX_pos = [50; -cfg.environment_params.road_width/4];
+cfg.RX_pos = [50+distance; -cfg.environment_params.road_width/4];
 cfg.bounce_limit = 3;
 
 rays = createRays(cfg);
@@ -41,11 +41,11 @@ end
 figure;
 plot(t*1e6, abs(h), 'LineWidth', 2);
 hold on;
-xlabel('Time (ns)');
+xlabel('Time (µs)');
 ylabel('Amplitude');
 title('Impulse Response |h(t)|');
 grid on;
-xlim([t(1) t(end)]*1e6);
+xlim([1.63 1.72]);
 ylim([-max(abs(h))/5 max(abs(h))*6/5]);
 
 % construction of H(f)

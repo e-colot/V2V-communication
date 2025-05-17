@@ -37,7 +37,7 @@ end
 figure;
 plot(t*1e6, abs(h), 'LineWidth', 2);
 hold on;
-xlabel('Time (ns)');
+xlabel('Time (µs)');
 ylabel('Amplitude');
 title('Impulse Response |h(t)|');
 grid on;

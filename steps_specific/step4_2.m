@@ -11,11 +11,13 @@ cfg.obstacles = createObstacles(cfg); % recompute obstacles
 
 cfg.TX_pos = [0; -cfg.environment_params.road_width/4];
 cfg.RX_pos = [distance; -cfg.environment_params.road_width/4];
+
+% For the LOS only
 cfg.bounce_limit = 0;
 
 rays = createRays(cfg);
 
-alpha = rays.reflexionAttenuation .* exp(-j*2*pi*cfg.transmit_params.fc.*rays.lengths./cfg.transmit_params.c)./rays.lengths;
+alpha = rays.reflexionAttenuation .* exp(-1j*2*pi*cfg.transmit_params.fc.*rays.lengths./cfg.transmit_params.c)./rays.lengths;
 
 %visualize(cfg, rays, 1);
 
@@ -26,17 +28,20 @@ disp(['Coherence bandwidth: ' num2str(round(deltaFc / 1e6)) ' MHz']);
 disp(['RF bandwidth: ' num2str(round(cfg.transmit_params.BW / 1e6)) ' MHz']);
 
 % construction of h(t)
-T = 15e-6; % time window
+T = 15e-6; % time window length
 t = 0:1/cfg.transmit_params.BW:T;
 h = zeros(1, length(t));
 for i = 1:length(alpha)
-    h = h + alpha(i) * sinc(cfg.transmit_params.BW * (t - timeOfFlight(i)));
+    % find closest bin
+    closestBin = find(t >= timeOfFlight(i), 1)-1;
+    % add the voltage to the closest bin
+    h(closestBin) = h(closestBin) + alpha(i);
 end
 
 figure;
 plot(t*1e6, abs(h), 'LineWidth', 2);
 hold on;
-xlabel('Time (ns)');
+xlabel('Time (µs)');
 ylabel('Amplitude');
 title('Impulse Response |h_{TDL}(t)|');
 grid on;
