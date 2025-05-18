@@ -50,16 +50,25 @@
 
 \chapter{Introduction}
 
-\begin{center}
-    
-    \Huge TODO\\
-    \vspace{0.5cm}
-    \large Might want to check all 3d plots names\\
-    Write an introduction\\
-    Resize figures to fill pages
-    \normalsize
-    
-\end{center}
+In this project, a vehicle to vehicle (V2V) communication system is studied. The goal is to model the communication channel between two cars moving at the same speed. The road is straight and surrounded by buildings on which the signal can bounce. \\
+The project is divided into two parts: the first one is a theoretical study of the channel and the second one presents the results of a simulation of this environment. The simulation is done using a raytracing algorithm that computes the paths of the rays between the two cars. Most of the experimental results are compared to the theoretical model and the differences are explained. \\
+
+The parameters of the simulation are as follows:
+\begin{itemize}
+    \item Carrier frequency: $f_c = 5.9GHz$
+    \item RF bandwidth: $B = 100MHz$
+    \item Receiver sensitivity: $P_{RX, \text{min}} = -70dBm$
+    \item Transmitter power: $P_{TX} = 0.1W$
+    \item TX and RX antennas: vertical $\lambda/2$ dipoles
+    \item Buildings relative permittivity: $\epsilon_r = 4$
+    \item Number of bounces: $3$
+    \item Distance between the two cars: $d \leq 1000m$
+    \item Local areas length: $5m$
+\end{itemize}
+
+
+
+
 \chapter{Theoretical answers}
 
 \section{$\lambda/2$ antennas}
@@ -539,40 +548,45 @@ The impulse response of the tapped delay line model is computed using the same m
 
 \chapter{Further analysis}
 \section{Description}
-As shown on figure \ref{fig:average_power}, the simulated road contains a $90^\circ$ crossing. This section will analyze what happens in the case of cars from different roads communicating with each other. The rays that would pass through buildings are supposed to be absorbed and are therefore not taken into account. Because of this, a lot of rays are removed and there is a need for a higher number of bounces. \\
+As shown on figure \ref{fig:average_power}, the simulated road contains a $90^\circ$ crossing. This section will analyze what happens when cars from different roads try to communicate with each other. The transmission cofficient of the rays that pass through buildings is supposed to be close to zero. Because of this, a lot of rays are removed and there is a need for a higher number of bounces. \\
 \section{Power analysis}
-The power analysis is done the same way as in section \ref{sec:power_analysis} but with a different setup. The 3D plot \ref{fig:3D_2} shows the averaged power received in local areas of 5m. with the transmitting car placed at 25m from the intersection center.
+The power analysis is done the same way as in section \ref{sec:power_analysis} but with a different setup. The 3D plot \ref{fig:3D_2} shows the average power received in local areas of 5m. with the transmitting car placed at 25m from the intersection center.
 
 \begin{figure}
     \centering
     \includegraphics[width=1\textwidth]{6_1.eps}
-    \caption{Average received power in local areas of 5m for a car placed at 25m from the intersection center with a maximal number of bounces of 6}
+    \caption{Average received power in local areas of 5m for a car placed at 25m from the intersection center with maximum 6 bounces}
     \label{fig:3D_2}
 \end{figure}
 
-As one can see, the power is now much less homogeneous than in the previous case and it becomes even more obvious when trying to model it. This was done the same way as previously and it is shown in figure \ref{fig:path_loss_2}. The fitted model is:
+
+As one can see, the power is now much less homogeneous than in the previous case and it becomes even more obvious when trying to model it. This was done the same way as previously and the fitted model together with the data points are shown in figure \ref{fig:path_loss_2}. The model is:
+\vspace{-1cm}
 
 \begin{align*}
-    L_0(d) &= 45.561 + 28.147 \cdot log_{10} \left(\frac{d}{1\text{m}}\right)\\
-    \text{with } \sigma_L &= 12.7679 \quad \text{dB}
+    L_0(d) = 45.561 + 28.147 \cdot log_{10} \left(\frac{d}{1\text{m}}\right)\qquad
+    &\text{implying} \qquad \left\{
+    \begin{array}{l}
+        n = 2.8147 \\
+        L_0(d_0) = 45.561
+    \end{array}
+    \right.\\
+    \text{with } \qquad \sigma_L &= 12.7679 \quad \text{dB}
 \end{align*}
 
-\huge Redo with only the perpendicular points maybe?\\
-\normalsize 
-
 The data points in figure \ref{fig:path_loss_2} can be split in two groups: the points with a lower path loss, that stay close to the Friis model, and the points with a higher path loss. The first group corresponds to the positions on the same road as the transmitter and the values are quiet close to the ones in figure \ref{fig:path_loss}. \\
-The second group corresponds to the cars on the perpendicular road. Those have a much higher path loss as a lot of rays are absorbed by the buildings. The fitted model being minimizing the least square error for the whole dataset, it is unable to properly fit to the data points. This is easily measured by the standard deviation which is, in this case, 40 times higher than the one computed previously. \\
+The second group corresponds to the cars on the perpendicular road. Those have a much higher path loss as a lot of rays are absorbed by the buildings. The fitted model being minimizing the least square error for the whole dataset, it is unable to properly fit to the data points. This is easily measured by the standard deviation which is now 40 times higher than the one computed for a single straight road. \\
 
 \begin{figure}
     \centering
     \includegraphics[width=1\textwidth]{6_2.eps}
-    \caption{Path loss of the channel and fitted model for a car placed at 25m from the intersection center with a maximal number of bounces of 6}
+    \caption{Path loss of the channel and fitted model for a car placed at 25m from the intersection center with maximum 6 bounces}
     \label{fig:path_loss_2}
 \end{figure}
 
 \section{Communication reliability}
 
-The change in the model implies that the cell radius must be recomputed. A table with the fade margins and the cell radius is shown below. Because the variability is much higher, the range of the cell radius is rapidly decreasing when the communication reliability becomes higher. \\
+The change in the model implies that the cell radius must be recomputed. A table with the fade margins and the cell radius is shown below. Because the variability is much higher, the range of the cell radius is rapidly decreasing when the required communication reliability increases. \\
 
 \begin{table}[H]
     \centering
@@ -588,7 +602,7 @@ The change in the model implies that the cell radius must be recomputed. A table
 \end{table}
 
 Note that in such a case, the cell radius is not a good indicator of the range of the car. One can indeed see that a 99\% communication reliability is only possible for a car placed at less than 5m from the emitter but at such distances, there is no wall between the two cars and the situation is identical to the one in section \ref{sec:power_analysis}. \\
-A more realistic number is the one for 50\% communication reliability. At such distances, the intersection has indeed an effect on the transmission and comparing it with the 200m in the straight road scenario, it is clear that the intersection has a big impact on the communication. \\
+A more realistic number is the one for 50\% communication reliability. The computed distance of around 50m shows that the intersection has indeed an effect on the transmission. There is division by four of the cell range, which corresponds to the need for 8 times more power at the emitter antenna to achieve the same range, as proved by \ref{eq:power_friis_simplified} in the first chapter. \\
 
 %\printglossary
 
