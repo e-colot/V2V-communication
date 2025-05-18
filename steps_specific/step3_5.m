@@ -5,14 +5,17 @@ clear; close all; clc;
 
 cfg = config(); 
 
-cfg.bounce_limit = 6;
+cfg.bounce_limit = 3;
 cfg.local_area_len = 5;
+
+cfg.environment_params.road_length = 2000;
+cfg.obstacles = createObstacles(cfg); % create obstacles
 
 
 x = (-cfg.environment_params.road_length+cfg.environment_params.local_area_len)/2:cfg.environment_params.local_area_len:(cfg.environment_params.road_length-cfg.environment_params.local_area_len)/2;
 y = (-cfg.environment_params.road_width+cfg.environment_params.local_area_len)/2:cfg.environment_params.local_area_len:(cfg.environment_params.road_width-cfg.environment_params.local_area_len)/2;
 
-cfg.TX_pos = [25; 0];
+cfg.TX_pos = [0; 0];
 
 avgPower = zeros(length(x), length(y)); % initialize power matrix
 distance = zeros(length(x), length(y)); % initialize distance matrix
