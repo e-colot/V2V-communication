@@ -336,10 +336,11 @@ The Rice factor close to the emitter is high, which indicates that the fading is
 The average received power in local areas is computed using:
 \vspace{-1cm}
 
-\begin{align*}
+\begin{align}
     <P_{\text{RX}}> &= \frac{1}{8 Z_a} \sum_{n=1}^{N} \left| V_{\text{OC,n}} \right|^2\\
-    &= \frac{1}{45\pi} \sum_{n=1}^{N} \left| V_{\text{RX,n}} \right|^2\\
-\end{align*}
+    &= \frac{1}{45\pi} \sum_{n=1}^{N} \left| V_{\text{RX,n}} \right|^2
+    \label{eq:average_power}
+\end{align}
 \vspace{-1cm}
 
 Where the sum is done over all the received rays. Figure \ref{fig:average_power} shows the average received power in local areas with a width of 5m for an emitter placed at the intersection of the two roads. The power is in dBm as it quicly becomes very small. \\
@@ -375,12 +376,12 @@ In which the parameters $L_0$ and $n$ must be found to fit the values of the sim
 
 \begin{align}
     \label{eq:path_loss_model}
-    L_0(d) = 51.4 + 16.1 \cdot log_{10} \left(\frac{d}{1\text{m}}\right)
+    L_0(d) = 51.2 + 16.2 \cdot log_{10} \left(\frac{d}{1\text{m}}\right)
     \qquad
     \text{implying} \qquad \left\{
     \begin{array}{l}
-        n = 1.61 \\
-        L_0(d_0) = 51.4
+        n = 1.62 \\
+        L_0(d_0) = 51.2
     \end{array}
     \right.
 \end{align}
@@ -395,8 +396,10 @@ In which the parameters $L_0$ and $n$ must be found to fit the values of the sim
 As the LLS estimator only gives a "\textit{best fit}" to the data, there is still a parameter to define: the variability $\sigma_L$. It is the standard deviation of the path loss around the fitted model defined in \ref{eq:path_loss_model} and its value here is:
 
 \begin{equation*}
-    \sigma_L = 0.255 \quad \text{dB}
+    \sigma_L = 0.227 \quad \text{dB}
 \end{equation*}
+
+The measured path loss is smaller than the one given by the Friis formula. This is because the simulation computes multiple rays that will (in the area averaging operation \ref{eq:average_power}) add up to a larger power than in a single ray model. The path loss model is therefore indeed supposed to be smaller than the Friis formula. \\
 
 \subsection{Cell range}
 \label{sec:cell_range}
@@ -413,15 +416,15 @@ The cell range can also be computed for each value of $P_{\text{success}}$ using
 \begin{align*}
     L(d) &= P_{\text{TX}} - P_{\text{RX}}\\
     L_0(d_\text{max}) &= P_{\text{TX}} - P_{RX, \text{min}} + G_{\text{TX}} + G_{\text{RX}}\\
-    51.4 + 16.1 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= P_{\text{TX}} - P_{RX, \text{min}} + G_{\text{TX}} + G_{\text{RX}}
+    51.2 + 16.2 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= P_{\text{TX}} - P_{RX, \text{min}} + G_{\text{TX}} + G_{\text{RX}}
 \end{align*}
 
 The minimal received power $P_{RX, \text{min}}$ is the receiver sensitivity to which the fade margin is added. Putting the values of the left parameters in the equation gives:
 
 \begin{align*}
-    51.4 + 16.1 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= 20 - (-70 + M) + 2 \times 10 \log_{10} \left(\frac{16}{3\pi}\right)\\
-    \log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= \frac{43.2 - M}{16.1}\\
-    d_{\text{max}} &= 10^{\frac{43.2 - M}{16.1}} \left[\text{m}\right]
+    51.2 + 16.2 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= 20 - (-70 + M) + 2 \times 10 \log_{10} \left(\frac{16}{3\pi}\right)\\
+    \log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= \frac{43.4 - M}{16.1}\\
+    d_{\text{max}} &= 10^{\frac{43.4 - M}{16.2}} \left[\text{m}\right]
 \end{align*}
 
 \begin{table}[H]
@@ -429,13 +432,15 @@ The minimal received power $P_{RX, \text{min}}$ is the receiver sensitivity to w
     \begin{tabular}{|c c c|}
         \hline
         Communication reliability & Fade margin (dB) & Cell radius (m) \\ \hline
-        50\% & 0 & 482.2 \\ \hline
-        95\% & 0.419 & 454.2 \\ \hline
-        99\% & 0.593 & 442.9 \\ \hline
+        50\% & 0 & 476.1 \\ \hline
+        95\% & 0.374 & 451.5 \\ \hline
+        99\% & 0.529 & 441.6 \\ \hline
     \end{tabular}
     \caption{Fade margins and cell radius for different communication reliability}
     \label{tab:fade_margins}
 \end{table}
+
+Because the error between the data and the fitted model is small (as proved both in figure \ref{fig:path_loss} and by the small value of $\sigma_L$), the cell radius varies very little with the communication reliability. 
 
 \begin{figure}[H]
     \centering
@@ -549,7 +554,7 @@ The impulse response of the tapped delay line model is computed using the same m
 
 \chapter{Further analysis}
 \section{Description}
-As shown on figure \ref{fig:average_power}, the simulated road contains a $90^\circ$ crossing. This section will analyze what happens when cars from different roads try to communicate with each other. The transmission cofficient of the rays that pass through buildings is supposed to be close to zero. Because of this, a lot of rays are removed and there is a need for a higher number of bounces. \\
+This section will analyze what happens when cars on perpendicular roads try to communicate with each other. The transmission cofficient of the rays that pass through buildings is supposed to be close to zero. Because of this, a lot of rays are removed and there is a need for a higher number of bounces. \\
 \section{Power analysis}
 The power analysis is done the same way as in section \ref{sec:power_analysis} but with a different setup. The 3D plot \ref{fig:3D_2} shows the average power received in local areas of 5m. with the transmitting car placed at 25m from the intersection center.
 
@@ -565,18 +570,19 @@ As one can see, the power is now much less homogeneous than in the previous case
 \vspace{-1cm}
 
 \begin{align*}
-    L_0(d) = 45.561 + 28.147 \cdot log_{10} \left(\frac{d}{1\text{m}}\right)\qquad
+    L_0(d) = 39.5 + 28.1 \cdot log_{10} \left(\frac{d}{1\text{m}}\right)\qquad
     &\text{implying} \qquad \left\{
     \begin{array}{l}
-        n = 2.8147 \\
-        L_0(d_0) = 45.561
+        n = 2.81 \\
+        L_0(d_0) = 39.5
     \end{array}
     \right.\\
-    \text{with } \qquad \sigma_L &= 12.7679 \quad \text{dB}
+    \text{with } \qquad \sigma_L &= 12.8 \quad \text{dB}
 \end{align*}
 
 The data points in figure \ref{fig:path_loss_2} can be split in two groups: the points with a lower path loss, that stay close to the Friis model, and the points with a higher path loss. The first group corresponds to the positions on the same road as the transmitter and the values are quiet close to the ones in figure \ref{fig:path_loss}. \\
 The second group corresponds to the cars on the perpendicular road. Those have a much higher path loss as a lot of rays are absorbed by the buildings. The fitted model being minimizing the least square error for the whole dataset, it is unable to properly fit to the data points. This is easily measured by the standard deviation which is now 40 times higher than the one computed for a single straight road. \\
+Comparing those two groups with the Friis model, it can be seen that the perpendicular is worse because of the absorbed rays and the points on the same road are better because the MPC's allow to have a larger power than in open space. \\
 
 \begin{figure}
     \centering
@@ -591,19 +597,19 @@ The change in the model implies that the cell radius must be recomputed. A table
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{|c|c|c|}
+    \begin{tabular}{|c c c|}
         \hline
         Communication reliability & Fade margin (dB) & Cell radius (m) \\ \hline
-        50\% & 0 & 55.22 \\ \hline
-        95\% & 20.979 & 9.92 \\ \hline
-        99\% & 29.721 & 4.855 \\ \hline
+        50\% & 0 & 90.4 \\ \hline
+        95\% & 21.0 & 16.2 \\ \hline
+        99\% & 29.7 & 7.9 \\ \hline
     \end{tabular}
     \caption{Fade margins and cell radius for different communication reliability}
     \label{tab:fade_margins_2}
 \end{table}
 
-Note that in such a case, the cell radius is not a good indicator of the range of the car. One can indeed see that a 99\% communication reliability is only possible for a car placed at less than 5m from the emitter but at such distances, there is no wall between the two cars and the situation is identical to the one in section \ref{sec:power_analysis}. \\
-A more realistic number is the one for 50\% communication reliability. The computed distance of around 50m shows that the intersection has indeed an effect on the transmission. There is division by four of the cell range, which corresponds to the need for 8 times more power at the emitter antenna to achieve the same range, as proved by \ref{eq:power_friis_simplified} in the first chapter. \\
+Note that in such a case, the cell radius is not a good indicator of the range of the car. One can indeed see that a 99\% communication reliability is only possible for a car placed at less than 10m from the emitter but at such distances, there cannot be a wall between the two cars and the situation is identical to the one in section \ref{sec:power_analysis}. \\
+A more realistic number is the one for 50\% communication reliability. The computed distance of around 90m shows that the intersection has indeed an effect on the transmission. There is division by four of the cell range, which corresponds to the need for 16 times more power at the emitter antenna to achieve the same range, as proved by \ref{eq:power_friis_simplified} in the first chapter. \\
 
 %\printglossary
 
