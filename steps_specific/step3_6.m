@@ -1,6 +1,6 @@
 clear; close all; clc;
 
-sigma = 12.7679;
+sigma = 0.25488;
 x = -1:1e-3:50;
 y = 1/2 * erfc(x./(sigma*sqrt(2)));
 
@@ -23,6 +23,5 @@ end
 ylim([1e-3 1]);
 varX = (maxX - minX);
 xlim([minX - varX/5, maxX + varX/5]);
-xlabel('M (dB)');
-ylabel('probability of outage');
-title('Outage Probability vs Fade Margin');
+xlabel('Fade margin (dB)');
+ylabel('Probability of outage');

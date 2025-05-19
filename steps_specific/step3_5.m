@@ -93,6 +93,9 @@ cbar.Label.String = 'Average Power (dBm)';
 title('Average Power Distribution in the Road Area', 'FontSize', 18);
 view(-40, 45);
 
+xlim([-250 250]);
+ylim([-250 250]);
+
 %% path loss model
 
 % Combine logPower and logPowerPerp into a single vector L
@@ -146,10 +149,8 @@ disp(['L_0(d) = ', num2str(params(1)), ' + ' num2str(params(2)), '*10*log(d)']);
 % sigma_l is the standard deviation of the experimental path loss around the fitted one
 sigma_l = std(L_0 - (params(1) + params(2)*10*log10(d)));
 shadowingMean = mean(L_0 - (params(1) + params(2)*10*log10(d)));
-disp(' ');
-disp(['Mean shadowing: ', num2str(shadowingMean), ', which should be close to 0']);
-disp(' ');
 disp(['Estimated variability: sigma_l = ', num2str(sigma_l)]);
+disp(' ');
 
 function plot3DCube(x, y, height, color, width)
     % Define the vertices of the cube
@@ -176,4 +177,39 @@ function plot3DCube(x, y, height, color, width)
 
     % Plot the cube
     patch('Vertices', vertices, 'Faces', faces, 'FaceColor', color, 'EdgeColor', 'none');
+end
+
+%% 3.7 range
+x = -1:1e-3:50;
+y = 1/2 * erfc(x./(sigma_l*sqrt(2)));
+
+figure;
+p = semilogy(x, y, 'LineWidth', 2);
+hold on;
+% Add data tips close to y = 0.5, y = 0.05, and y = 0.01
+y_targets = [0.5, 0.05, 0.01];
+margins = zeros(3, 1);
+maxX = 0;
+minX = 0;
+for i = 1:length(y_targets)
+    [~, idx] = min(abs(y - y_targets(i)));
+    x_val = x(idx);
+    y_val = y(idx);
+    % Update maxX and maxY for the datatip
+    maxX = max(maxX, x_val);
+    minX = min(minX, x_val);
+    datatip(p, x_val, y_val);
+    margins(i) = x_val;
+end
+ylim([1e-3 1]);
+varX = (maxX - minX);
+xlim([minX - varX/5, maxX + varX/5]);
+xlabel('Fade margin (dB)');
+ylabel('Probability of outage');
+
+for i = 1:length(margins)
+
+    cellRange = 10^((10*log10(cfg.transmit_params.TX_power*1e3)-cfg.transmit_params.RX_sensitivity-margins(i)+20*log10(16/(3*pi))-params(1))/(10*params(2)));
+    disp(['Range for outage probability ', num2str(y_targets(i)), ': ', num2str(cellRange), ' m']);
+
 end

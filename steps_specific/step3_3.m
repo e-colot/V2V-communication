@@ -27,14 +27,10 @@ for i = 1:length(distance)
 
     receivedVoltage(i) = norm(sum(rays.voltages(:))); % Sum of all elements in rays.voltages
 end
-% visualize(cfg, rays, 2);
-% xlim([30 170]);
-% ylim([-cfg.environment_params.road_width cfg.environment_params.road_width]);
-% view(114, 47);
 
-% P_RX = V_OC^2 / (Z_a + Z_L)
-%      = (2*V_RX)^2 / (Z_a + Z_L)
-simulatedPower = (2*receivedVoltage).^2 / (720 * pi / 16);
+
+% P_RX = V_RX^2 / (Z_a + Z_L)
+simulatedPower = (receivedVoltage).^2 / (720 * pi / 16);
 simulatedPowerdBm = 10*log10(simulatedPower / 1e-3);
 
 figure;

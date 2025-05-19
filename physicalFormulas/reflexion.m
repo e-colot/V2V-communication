@@ -12,7 +12,7 @@ function gamma = reflexion(angle, epsilon)
     end
 
     % gamma = cos(angle_rad) - y / (cos(angle_rad) + y)
-    y = sqrt(eps * (1 - sin(angle)^2 / eps)); 
+    y = sqrt(eps - sin(angle)^2); 
 
     % could have been implemented using dot products for speed
 

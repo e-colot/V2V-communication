@@ -267,22 +267,22 @@ The received voltage has been computed on the same setup using equation \ref{eq:
 
 The voltage carried by each ray is shown in figure \ref{fig:voltageDemo} using a colormap and the exact values are given in table \ref{tab:ray_properties}. The total received voltage is computing by summing the voltages of each ray and taking the phase into account. This gave the following result:
 
-\begin{align*}
-    \text{Total voltage} = 145.6 \mu V \angle 48.8^\circ
-\end{align*}
+\begin{equation*}
+    \text{Total voltage} = 419.5 \mu V \angle -32.0^\circ
+\end{equation*}
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{|c|c|c|c|c|}
+    \begin{tabular}{|c|c c c c|}
         \hline
         Ray Index & Ray physical angle (°) & Ray length (m) & Carried voltage ($\mu V$) & Phase (°) \\ \hline
-        1 & 0.0 & 100.0 & 129.1 & -30.0\\ \hline
-        2 & 5.7 & 100.5 & 114.6 & 81.2\\ \hline
-        3 & -16.7 & 104.4 & 88.9 & 3.7\\ \hline
-        4 & -21.8 & 107.7 & 51.2 & 149.3\\ \hline
-        5 & 21.8 & 107.7 & 51.2 & 149.3\\ \hline
-        6 & 26.6 & 111.8 & 24.9 & -161.93\\ \hline
-        7 & -35.0 & 122.1 & 15.0 & 134.1\\ \hline
+        1 & 0.0 & 100.0 & 258.3 & 120.0\\ \hline
+        2 & 5.7 & 100.5 & 202.0 & -41.2\\ \hline
+        3 & -16.7 & 104.4 & 102.4 & -59.3\\ \hline
+        4 & -21.8 & 107.7 & 38.2 & -2.8\\ \hline
+        5 & 21.8 & 107.7 & 202.0 & -41.2\\ \hline
+        6 & 26.6 & 111.8 & 102.4 & -59.3\\ \hline
+        7 & -35.0 & 122.1 & 38.2 & -2.8\\ \hline
     \end{tabular}
     \caption{Properties of each ray shown in figure \ref{fig:raytracingDemo}. The carried voltage and its phase have been added.}
     \label{tab:ray_properties}
@@ -329,15 +329,18 @@ where $a_n$ is the amplitude of the $n^{th}$ ray with $a_0$ the amplitude of the
     \label{fig:K(d)}
 \end{figure}
 
-The Rice factor is a good indicator of the portion of the power that is due to the LOS ray. The point at which it becomes smaller than 1 (or 0dB) is the point at which the power due to the LOS ray is equal to the sum of the power of the other rays. The Rice factor close to the emitter is high, which indicates that the fading is low and it becomes smaller after only a few meters. As seen in figure \ref{fig:P_RX(d)}, the received power oscillates around the expected value because the MPC's start to generate fading.\\
+The Rice factor is a good indicator of the portion of the power that is due to the LOS ray. The point at which it becomes smaller than 1 (or 0dB) is the point at which the power due to the LOS ray is equal to the sum of the power of the other rays. \\
+The Rice factor close to the emitter is high, which indicates that the fading is low and $K$ becomes smaller after only a few meters. As seen in figure \ref{fig:P_RX(d)}, the received power oscillates more around the expected value because the MPC's start to generate fading.\\
 
 \subsection{Average received power in local areas}
 The average received power in local areas is computed using:
+\vspace{-1cm}
 
 \begin{align*}
-    <P_{\text{RX}}> &= \frac{1}{8 Z_a} \sum_{n=1}^{N} \left| V_{OC} \right|^2\\
-    &= \frac{1}{45\pi} \sum_{n=1}^{N} \left| V_{\text{RX}} \right|^2\\
+    <P_{\text{RX}}> &= \frac{1}{8 Z_a} \sum_{n=1}^{N} \left| V_{\text{OC,n}} \right|^2\\
+    &= \frac{1}{45\pi} \sum_{n=1}^{N} \left| V_{\text{RX,n}} \right|^2\\
 \end{align*}
+\vspace{-1cm}
 
 Where the sum is done over all the received rays. Figure \ref{fig:average_power} shows the average received power in local areas with a width of 5m for an emitter placed at the intersection of the two roads. The power is in dBm as it quicly becomes very small. \\
 
@@ -348,9 +351,7 @@ Where the sum is done over all the received rays. Figure \ref{fig:average_power}
     \label{fig:average_power}
 \end{figure}
 
-For visualization purposes, figure \ref{fig:average_power} is limited to 250m. The colormap indicates that the lowest power obtained on the plot is right above -70dBm. This is the sensitivity of the receiver so when the cell radius will be computed in section \ref{sec:cell_range}, one can expect it to be a bit less than 250m.\\
-
-\section{Full channel, narrowband model}
+For visualization purposes, figure \ref{fig:average_power} is limited to 250m. The colormap indicates that the power obtained at the edge of the plot is approximately equal to $-60$ dBm. This is still $10$ dBm above the receiver sensitivity the cell radius will certainly by larger than 250m. It will be computed in section \ref{sec:cell_range} with the path loss model that has to be established.
 
 \subsection{Path loss model}
 The path loss of the channel $L(d)$ and the path loss that does not depend on the antennas $L_0(d)$ are defined (with every term in dB) as:
@@ -374,12 +375,12 @@ In which the parameters $L_0$ and $n$ must be found to fit the values of the sim
 
 \begin{align}
     \label{eq:path_loss_model}
-    L_0(d) = 58.501 + 15.6 \cdot log_{10} \left(\frac{d}{1\text{m}}\right)
+    L_0(d) = 51.4 + 16.1 \cdot log_{10} \left(\frac{d}{1\text{m}}\right)
     \qquad
     \text{implying} \qquad \left\{
     \begin{array}{l}
-        n = 1.56 \\
-        L_0(d_0) = 58.501
+        n = 1.61 \\
+        L_0(d_0) = 51.4
     \end{array}
     \right.
 \end{align}
@@ -394,7 +395,7 @@ In which the parameters $L_0$ and $n$ must be found to fit the values of the sim
 As the LLS estimator only gives a "\textit{best fit}" to the data, there is still a parameter to define: the variability $\sigma_L$. It is the standard deviation of the path loss around the fitted model defined in \ref{eq:path_loss_model} and its value here is:
 
 \begin{equation*}
-    \sigma_L = 0.30236 \quad \text{dB}
+    \sigma_L = 0.255 \quad \text{dB}
 \end{equation*}
 
 \subsection{Cell range}
@@ -412,25 +413,25 @@ The cell range can also be computed for each value of $P_{\text{success}}$ using
 \begin{align*}
     L(d) &= P_{\text{TX}} - P_{\text{RX}}\\
     L_0(d_\text{max}) &= P_{\text{TX}} - P_{RX, \text{min}} + G_{\text{TX}} + G_{\text{RX}}\\
-    58.501 + 15.6 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= P_{\text{TX}} - P_{RX, \text{min}} + G_{\text{TX}} + G_{\text{RX}}
+    51.4 + 16.1 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= P_{\text{TX}} - P_{RX, \text{min}} + G_{\text{TX}} + G_{\text{RX}}
 \end{align*}
 
 The minimal received power $P_{RX, \text{min}}$ is the receiver sensitivity to which the fade margin is added. Putting the values of the left parameters in the equation gives:
 
 \begin{align*}
-    58.501 + 15.6 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= 20 - (-70 + M) + 2 \times 10 \log_{10} \left(\frac{16}{3\pi}\right)\\
-    \log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= \frac{36.1 - M}{15.6}\\
-    d_{\text{max}} &= 10^{\frac{36.1 - M}{15.6}} \left[\text{m}\right]
+    51.4 + 16.1 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= 20 - (-70 + M) + 2 \times 10 \log_{10} \left(\frac{16}{3\pi}\right)\\
+    \log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= \frac{43.2 - M}{16.1}\\
+    d_{\text{max}} &= 10^{\frac{43.2 - M}{16.1}} \left[\text{m}\right]
 \end{align*}
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{|c|c|c|}
+    \begin{tabular}{|c c c|}
         \hline
         Communication reliability & Fade margin (dB) & Cell radius (m) \\ \hline
-        50\% & 0 & 205.98 \\ \hline
-        95\% & 0.497 & 191.41 \\ \hline
-        99\% & 0.703 & 185.68 \\ \hline
+        50\% & 0 & 482.2 \\ \hline
+        95\% & 0.419 & 454.2 \\ \hline
+        99\% & 0.593 & 442.9 \\ \hline
     \end{tabular}
     \caption{Fade margins and cell radius for different communication reliability}
     \label{tab:fade_margins}
