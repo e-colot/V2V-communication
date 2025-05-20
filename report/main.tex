@@ -276,15 +276,15 @@ The voltage carried by each ray is shown in figure \ref{fig:voltageDemo} using a
     \begin{tabular}{|c|c c c c|}
         \hline
         Ray Index & Ray physical angle (°) & Ray length (m) & Carried voltage ($\mu V$) & Phase (°) \\ \hline
-        1 & 0.0 & 100.0 & 258.3 & 120.0\\ \hline
-        2 & 5.7 & 100.5 & 202.0 & -41.2\\ \hline
-        3 & -16.7 & 104.4 & 102.4 & -59.3\\ \hline
-        4 & -21.8 & 107.7 & 38.2 & -2.8\\ \hline
-        5 & 21.8 & 107.7 & 202.0 & -41.2\\ \hline
-        6 & 26.6 & 111.8 & 102.4 & -59.3\\ \hline
-        7 & -35.0 & 122.1 & 38.2 & -2.8\\ \hline
+        1 & 90.0 & 100.0 & 258.3 & 120.0\\ \hline
+        2 & 78.7 & 102.0 & 202.0 & -41.2\\ \hline
+        3 & -68.2 & 107.7 & 102.4 & -59.3\\ \hline
+        4 & 59.0 & 116.6 & 38.2 & -2.8\\ \hline
+        5 & -78.7 & 102.0 & 202.0 & -41.2\\ \hline
+        6 & 68.2 & 107.7 & 102.4 & -59.3\\ \hline
+        7 & -59.0 & 116.6 & 38.2 & -2.8\\ \hline
     \end{tabular}
-    \caption{Properties of each ray shown in figure \ref{fig:raytracingDemo}. The carried voltage and its phase have been added.}
+    \caption{Properties of each ray shown in figure \ref{fig:raytracingDemo}. For the voltage computation, the physical angle is now the one between the ray and the normal to the wall. The carried voltage and its phase have been added.}
     \label{tab:ray_properties}
 \end{table}
 
@@ -609,7 +609,7 @@ The change in the model implies that the cell radius must be recomputed. A table
 \end{table}
 
 Note that in such a case, the cell radius is not a good indicator of the range of the car. One can indeed see that a 99\% communication reliability is only possible for a car placed at less than 10m from the emitter but at such distances, there cannot be a wall between the two cars and the situation is identical to the one in section \ref{sec:power_analysis}. \\
-A more realistic number is the one for 50\% communication reliability. The computed distance of around 90m shows that the intersection has indeed an effect on the transmission. There is division by four of the cell range, which corresponds to the need for 16 times more power at the emitter antenna to achieve the same range, as proved by \ref{eq:power_friis_simplified} in the first chapter. \\
+A more realistic number is the one for 50\% communication reliability. The computed distance of 90m shows that the intersection has indeed a negative effect on the range. There is division by four of the cell radius, which corresponds to the need for 16 times more power at the emitter antenna to achieve the same range, as proved by \ref{eq:power_friis_simplified} in the first chapter. \\
 
 %\printglossary
 
