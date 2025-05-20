@@ -265,26 +265,31 @@ The received voltage has been computed on the same setup using equation \ref{eq:
     \Gamma_{\perp} = \frac{\cos \theta_i - \sqrt{\epsilon_r-\sin^2\theta_i}}{\cos \theta_i + \sqrt{\epsilon_r-\sin^2\theta_i}}
 \end{align*}
 
-The voltage carried by each ray is shown in figure \ref{fig:voltageDemo} using a colormap and the exact values are given in table \ref{tab:ray_properties}. The total received voltage is computing by summing the voltages of each ray and taking the phase into account. This gave the following result:
+The voltage carried by each ray is shown in figure \ref{fig:voltageDemo} using a colormap and the exact values are given in table \ref{tab:ray_properties}. The total received voltage is found with:
+\vspace{-1cm}
 
-\begin{equation*}
-    \text{Total voltage} = 419.5 \mu V \angle -32.0^\circ
-\end{equation*}
+\begin{align*}
+    \left|V_{\text{tot}}\right| &= \left|\sum_{n=1}^{N} V_i\right|\\
+    &= 419.5 \mu V
+\end{align*}
+\vspace{-1cm}
+
+Where $N$ is the number of rays and $V_i$ the voltage carried by the $i^{th}$ ray. The total received voltage is not equal to the sum of the voltages because of the different phase of each ray. \\
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{|c|c c c c|}
+    \begin{tabular}{|c|c c c|}
         \hline
-        Ray Index & Ray physical angle (°) & Ray length (m) & Carried voltage ($\mu V$) & Phase (°) \\ \hline
-        1 & 90.0 & 100.0 & 258.3 & 120.0\\ \hline
-        2 & 78.7 & 102.0 & 202.0 & -41.2\\ \hline
-        3 & -68.2 & 107.7 & 102.4 & -59.3\\ \hline
-        4 & 59.0 & 116.6 & 38.2 & -2.8\\ \hline
-        5 & -78.7 & 102.0 & 202.0 & -41.2\\ \hline
-        6 & 68.2 & 107.7 & 102.4 & -59.3\\ \hline
-        7 & -59.0 & 116.6 & 38.2 & -2.8\\ \hline
+        Ray Index & Ray physical angle (°) & Ray length (m) & Carried voltage ($\mu V$)\\ \hline
+        1 & 90.0 & 100.0 & 258.3\\ \hline
+        2 & 78.7 & 102.0 & 202.0\\ \hline
+        3 & -68.2 & 107.7 & 102.4\\ \hline
+        4 & 59.0 & 116.6 & 38.2\\ \hline
+        5 & -78.7 & 102.0 & 202.0\\ \hline
+        6 & 68.2 & 107.7 & 102.4\\ \hline
+        7 & -59.0 & 116.6 & 38.2\\ \hline
     \end{tabular}
-    \caption{Properties of each ray shown in figure \ref{fig:raytracingDemo}. For the voltage computation, the physical angle is now the one between the ray and the normal to the wall. The carried voltage and its phase have been added.}
+    \caption{Properties of each ray shown in figure \ref{fig:raytracingDemo}. For the voltage computation, the physical angle is now the one between the ray and the normal to the wall. The carried voltage has been added.}
     \label{tab:ray_properties}
 \end{table}
 
