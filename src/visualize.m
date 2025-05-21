@@ -192,8 +192,9 @@ function visualize(cfg, rays, legendMode)
     view(111, 45);
     camlight;
     lighting gouraud;
-    title('Road');
     rotate3d on; % Enable rotation
+    xlabel('');
+    ylabel('');
     set(gca, 'CameraViewAngleMode', 'manual'); % Prevent displacement
     set(gca, 'ZTick', []); % Remove z-axis numbering
 

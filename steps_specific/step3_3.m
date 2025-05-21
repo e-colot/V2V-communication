@@ -37,7 +37,6 @@ figure;
 semilogx(distance, simulatedPowerdBm, 'LineWidth', 2);
 xlabel('Distance (m)');
 ylabel('Received Power (dBm)');
-title('Received Power vs Distance');
 hold on;
 grid on;
 

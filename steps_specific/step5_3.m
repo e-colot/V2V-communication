@@ -53,26 +53,10 @@ end
 figure;
 plot(t_fine*1e6, abs(h_step), 'LineWidth', 2);
 xlabel('Time (µs)');
-ylabel('Amplitude');
-title('Impulse Response |h_{TDL}(t)|');
+ylabel('|h_{TDL}(t)|');
 grid on;
 xlim([1.63 1.72]);
 ylim([-max(abs(h_step))/5 max(abs(h_step))*6/5]);
-
-
-
-%% construction of H(f)
-
-% f = -(length(t)-1)/(2*T):1/T:(length(t)-1)/(2*T);
-% H = fftshift(fft(h));
-
-% figure;
-% plot(f*1e-6, abs(H), 'LineWidth', 2);
-% xlabel('Frequency (MHz)');
-% ylabel('Amplitude');
-% title('Frequency Response |H(f)|');
-% grid on;
-% ylim([-max(abs(H))/5 max(abs(H))*6/5]);
 
 
 

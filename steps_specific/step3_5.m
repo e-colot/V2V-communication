@@ -6,7 +6,7 @@ clear; close all; clc;
 cfg = config(); 
 
 cfg.bounce_limit = 3;
-cfg.local_area_len = 5;
+cfg.environment_params.local_area_len = 5;
 
 cfg.environment_params.road_length = 2000;
 
@@ -22,32 +22,39 @@ cfg.obstacles(2, :, 2) = [1100, cfg.environment_params.road_width/2];
 x = (-cfg.environment_params.road_length+cfg.environment_params.local_area_len)/2:cfg.environment_params.local_area_len:(cfg.environment_params.road_length-cfg.environment_params.local_area_len)/2;
 y = (-cfg.environment_params.road_width+cfg.environment_params.local_area_len)/2:cfg.environment_params.local_area_len:(cfg.environment_params.road_width-cfg.environment_params.local_area_len)/2;
 
-cfg.TX_pos = [0; 0];
+TX_y_pos = -cfg.environment_params.road_width/2+1:1:cfg.environment_params.road_width/2-1;
 
-avgPower = zeros(length(x), length(y)); % initialize power matrix
-distance = zeros(length(x), length(y)); % initialize distance matrix
+avgPower = zeros(length(x), length(y), length(TX_y_pos)); % initialize power matrix
+distance = zeros(length(x), length(y), length(TX_y_pos)); % initialize distance matrix
 
 hWait = waitbar(0, 'Processing...'); % Initialize waitbar
-for xi = 1:length(x)
-    for yi = 1:length(y)
-        cfg.RX_pos = [x(xi); y(yi)];
-        distance(xi, yi) = norm(cfg.RX_pos - cfg.TX_pos); % calculate distance
+for TX_y = 1:length(TX_y_pos)
+    cfg.TX_pos = [0; TX_y_pos(TX_y)];
+    for xi = 1:length(x)
+        for yi = 1:length(y)
+            cfg.RX_pos = [x(xi); y(yi)];
+            distance(xi, yi, TX_y) = norm(cfg.RX_pos - cfg.TX_pos); % calculate distance
 
-        rays = createRays(cfg);
-        rays.voltages = rayVoltage(rays, cfg); % calculate the voltages
+            rays = createRays(cfg);
+            rays.voltages = rayVoltage(rays, cfg); % calculate the voltages
 
-        avgPower(xi, yi) = sum(abs(rays.voltages).^2)/(45*pi);
-        if avgPower(xi, yi) == 0
-            avgPower(xi, yi) = NaN; % avoid log(0)
+            avgPower(xi, yi, TX_y) = sum(abs(rays.voltages).^2)/(45*pi);
+            if avgPower(xi, yi, TX_y) == 0
+                avgPower(xi, yi, TX_y) = NaN; % avoid log(0)
+            end
         end
+        waitbar((xi + length(x)*TX_y) / (length(x)*length(TX_y_pos)), hWait); % Update waitbar
     end
-    waitbar(xi / length(x), hWait); % Update waitbar
 end
 close(hWait); % Close waitbar
 
-% Normalize the log of avgPower
+% Calculate the average power over the TX positions
+TX_avgPower = mean(avgPower, 3, 'omitnan');
+
+
+% Normalize the log of TX_avgPower
 % multiplied by 1e3 to convert to mW and then to dBm
-logPower = 10*log10(avgPower*1e3);
+logPower = 10*log10(TX_avgPower*1e3);
 minVal = min(min(logPower));
 maxVal = max(max(logPower));
 normalizedPower = (logPower - minVal) / (maxVal - minVal);
@@ -111,12 +118,12 @@ cbar = colorbar;
 cbar.FontSize = 12; % Set font size for colorbar
 cbar.Ticks = linspace(0, 1, 5); % Set ticks for normalized values
 cbar.TickLabels = arrayfun(@(v) sprintf('%.2f dBm', v), linspace(min(logPower(:)), max(logPower(:)), 5), 'UniformOutput', false);
-view(-40, 45);
 
 
 %% path loss model
 
-% Combine logPower and logPowerPerp into a single vector L
+logPower = 10*log10(avgPower*1e3);
+% Combine logPower into a single vector L
 L = -[logPower(:)] + 10*log10(cfg.transmit_params.TX_power*1e3); % remove TX power in dBm
 d = [distance(:)]; % combine distances
 
@@ -143,7 +150,7 @@ figure;
 plot(x, y_fit, 'r', 'LineWidth', 1.5); % plot the fitted line
 xlabel('Distance (m)');
 ylabel('Path Loss (dB)');
-title('Path Loss vs Distance');
+xlim([0 250]);
 grid on;
 hold on;
 

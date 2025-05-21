@@ -45,7 +45,6 @@ hold on;
 [~, idx] = min(abs(10*log10(K))); % Find the index closest to 0 dB
 datatip(p, distance(idx), 10*log10(K(idx)), 'Location', 'northwest');
 ylabel('Rice Factor (K) [dB]');
-title('Rice Factor (K) vs Distance');
 grid on;
 
 

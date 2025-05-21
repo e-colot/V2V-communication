@@ -48,7 +48,7 @@
 
 %\listoffigures % ToC for figures
 
-\chapter{Introduction}
+\chapter*{Introduction}
 
 In this project, a vehicle to vehicle (V2V) communication system is studied. The goal is to model the communication channel between two cars moving at the same speed. The road is straight and surrounded by buildings on which the signal can bounce. \\
 The project is divided into two parts: the first one is a theoretical study of the channel and the second one presents the results of a simulation of this environment. The simulation is done using a raytracing algorithm that computes the paths of the rays between the two cars. Most of the experimental results are compared to the theoretical model and the differences are explained. \\
@@ -69,9 +69,9 @@ The parameters of the simulation are as follows:
 
 
 
-\chapter{Theoretical answers}
+\chapter{Theoretical preliminaries}
 
-\section{$\lambda/2$ antennas}
+\section{Equivalent electric circuit}
 
 \begin{figure}[H]
     \centering
@@ -81,6 +81,8 @@ The parameters of the simulation are as follows:
 \end{figure}
 
 Fig \ref{fig:equivalent_electrical_circuit} shows the equivalent electrical circuit at RX and TX where $\underline{V}_{oc}$ is the induced voltage, $\underline{V}_{\text{RX}}$ the voltage at the output of the RX antenna, $\underline{V}_{\text{TX}}$ the one at the input of the TX antenna and $\underline{I}_{a}$ the current entering the TX antenna.\\
+
+\section{Equivalent height}
 
 As both antennas are vertical $\lambda/2$ dipoles, their equivalent heights can be analytically computed:
 \vspace{-1cm}
@@ -95,6 +97,8 @@ Where $\theta$ and $\phi$ are respectively the polar and the azimuthal angles. T
 \begin{align*}
     \vec{h}_{e\perp} (\phi) = -\frac{\lambda}{\pi} \vec{1_{\theta}}\\
 \end{align*}
+
+\section{Emitted electric field}
 
 The transverse part of the equivalent height gives rise to an expression for the emitted electric field.
 \vspace{-1cm}
@@ -127,6 +131,8 @@ The last step is to replace the travel distance $r$ with $c \tau$ as the wave is
     \label{eq:emitted_electric_field}
 \end{equation*}
 
+\section{Received voltage}
+
 The voltage at the output of the antenna $\underline{V}_{\text{RX}}$ can be deduced from the equivalent electric circuit \ref{fig:equivalent_electrical_circuit} as it is a simple voltage divider. Assuming matching impedances between the antenna and the load, we have:
 \vspace{-1cm}
 
@@ -151,14 +157,18 @@ For later use, the time of flight $\tau$ is replaced by the traveled distance $d
     \label{eq:voltage_RX}
 \end{equation}
 
-\section{LOS channel}
+\chapter{LOS channel}
 \label{sec:LOS_channel}
+
+\section{Impulse response}
 
 Assuming the communication takes place via a LOS ray only, the channel impulse response $h(\tau)$ is defined as follows:
 
 \begin{equation*}
     h(\tau) = \frac{\alpha_1 e^{-j\frac{2\pi f_cd_1}{c}}}{d_1} \delta\left(\tau - \tau_1\right)
 \end{equation*}
+
+\section{Transfer function}
 
 Where $d_1$ is the distance of propagation and $\tau_1$ he propagation delay of the direct ray. $\alpha_1$ (which might be complex) takes into account a phase change or attenuation due for example to reflections whereas the imaginary exponential next to it corresponds to the phase change due to the propagation delay. \\
 The transfer function $H(f)$ of the channel is found by taking the Fourier transform of $h(\tau)$
@@ -169,8 +179,10 @@ The transfer function $H(f)$ of the channel is found by taking the Fourier trans
     &= \alpha_1\frac{e^{-j\frac{2\pi f_c d_1}{c}}}{d_1}e^{-j2\pi f \frac{d_1}{c}}\\
     &= \alpha_1\frac{e^{-j \frac{2\pi (f+f_c)d_1}{c}}}{d_1}\\
 \end{align*}
+\vspace{-2.5cm}
 
-\vspace{-1cm}
+\section{Narrowband channel}
+
 The narrowband impulse response of the channel $h_{\text{NB}}(\tau)$ is, in the case of a single ray, simply equal to $h(\tau$) where the impulse $\delta\left(\tau - \tau_1\right)$ has been removed. This is because the narrowband hypothesis states that the receiver perceives the sum of all rays instead of having each individual ray in separate taps. The signal received at the output of the channel $y(t)$ is given by:
 
 \begin{equation*}
@@ -181,6 +193,9 @@ The narrowband impulse response of the channel $h_{\text{NB}}(\tau)$ is, in the 
 \end{equation*}
 
 Where $x(t)$ is the transmitted signal. \\
+
+\section{Power analysis}
+
 The ratio between the received power $P_{\text{RX}}$ and the transmitted power $P_{\text{TX}}$ is found with:
 \vspace{-1cm}
 
@@ -247,7 +262,13 @@ Where $v$ is the speed of the cars. Taking for it the maximal speed of a car in 
 \end{equation*}
 Because the bandwidth of the channel is 100 MHz, more than 64 ksymbols can be sent in this time. With a modern modulation such as 64-QAM, this allows to send packets of more than 350 kbits. This size should be used as maximum size for the packets in order for the channel to be considered as constant during the transmission. \\
 
-\chapter{Simulation results}
+
+
+
+
+
+
+\chapter{Full channel, narrowband analysis}
 \section{Raytracing}
 
 After having implemented a raytracing algorithm, the simulation is able to compute every path from the transmitter to the receiver. Figure \ref{fig:raytracingDemo} shows the result of the simulation for a 20m wide road surrounded by buildings. 
@@ -259,6 +280,7 @@ After having implemented a raytracing algorithm, the simulation is able to compu
     \label{fig:raytracingDemo}
 \end{figure}
 
+\section{Received voltage}
 The received voltage has been computed on the same setup using equation \ref{eq:voltage_RX} to which the reflection coefficients $\Gamma_{\perp}$ have been added. 
 
 \begin{align*}
@@ -302,14 +324,13 @@ Where $N$ is the number of rays and $V_i$ the voltage carried by the $i^{th}$ ra
 
 Figure \ref{fig:voltageDemo} and table \ref{tab:ray_properties} clearly show that the power is decreasing as the length of the ray increases. This means that the LOS ray is the one carrying the most power. From a certain distance, the length of every MPC will start to be closer to the one of the ray that does not bounce and their contribution will then be as important as the one of the LOS ray. This will be detailed with the Rice factor in section \ref{sec:fading}.
 
-\section{Power analysis}
+\section{Received power}
 \label{sec:power_analysis}
-\subsection{Received power}
 By varying the distance between the two communicating cars between 0 and 1000m, a comparison is made between the raytracing simulation and the theoretical model on figure \ref{fig:P_RX(d)}. The simulated power is computed by taking the square of $V_{OC}$ divided by $Z_L \mathbin{\|} Z_a$ (see figure \ref{fig:equivalent_electrical_circuit}) and the theoretical power is computed using equation \ref{eq:power_friis_simplified} (Friis formula).
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{3_3_log.eps}
+    \includegraphics[width=1\textwidth]{3_3.eps}
     \caption{Received power as a function of the distance between the two cars}
     \label{fig:P_RX(d)}
 \end{figure}
@@ -317,7 +338,7 @@ By varying the distance between the two communicating cars between 0 and 1000m, 
 For short distances, the LOS ray is the only one contributing to the received power which explains the good match of the simulation with theory. \\
 After a few meters, the multi path components (MPC) start to have an impact on the received power and the resulting interferences make the simulated power $<P_{RX}>$ oscillate around the theoretical power $\ll P_{RX} \gg$. This effect is called shadowing and it will be modeled later on.\\
 
-\subsection{Fading}
+\section{Rice factor}
 \label{sec:fading}
 The oscillation around the expected power can be modeled with a Rice distribution as the LOS ray is the strongest one. The Rice factor $K$ is defined as the ratio between the power of the LOS ray and the power of the other rays:
 
@@ -337,7 +358,7 @@ where $a_n$ is the amplitude of the $n^{th}$ ray with $a_0$ the amplitude of the
 The Rice factor is a good indicator of the portion of the power that is due to the LOS ray. The point at which it becomes smaller than 1 (or 0dB) is the point at which the power due to the LOS ray is equal to the sum of the power of the other rays. \\
 The Rice factor close to the emitter is high, which indicates that the fading is low and $K$ becomes smaller after only a few meters. As seen in figure \ref{fig:P_RX(d)}, the received power oscillates more around the expected value because the MPC's start to generate fading.\\
 
-\subsection{Average received power in local areas}
+\section{Average received power in local areas}
 The average received power in local areas is computed using:
 \vspace{-1cm}
 
@@ -348,7 +369,8 @@ The average received power in local areas is computed using:
 \end{align}
 \vspace{-1cm}
 
-Where the sum is done over all the received rays. Figure \ref{fig:average_power} shows the average received power in local areas with a width of 5m for an emitter placed at the intersection of the two roads. The power is in dBm as it quicly becomes very small. \\
+Where the sum is done over all the received rays. Figure \ref{fig:average_power} shows the average received power in local areas with a width of 5m. The power is in dBm as it quicly becomes very small. \\
+To have enough data points to model the whole area, the transmitter is placed at all the possible positions (spaced by $1m$) on the width of the road. The receiver is then placed on every tile of $5x5m$ and the average power is computed using equation \ref{eq:average_power}. Figure \ref{fig:average_power} then shows this average power that is again averaged on every position of the emitter\footnote{The impact of placing the emitter on multiple points instead of just placing it in the center of the road has close to no impact on the path loss model. It has still been done as the model is now suited for any transmitter position on the road}.
 
 \begin{figure}[H]
     \centering
@@ -357,9 +379,8 @@ Where the sum is done over all the received rays. Figure \ref{fig:average_power}
     \label{fig:average_power}
 \end{figure}
 
-For visualization purposes, figure \ref{fig:average_power} is limited to 250m. The colormap indicates that the power obtained at the edge of the plot is approximately equal to $-60$ dBm. This is still $10$ dBm above the receiver sensitivity the cell radius will certainly by larger than 250m. It will be computed in section \ref{sec:cell_range} with the path loss model that has to be established.
+For visualization purposes, figure \ref{fig:average_power} is limited to 250m. The colormap indicates that the power obtained at the edge of the plot is approximately equal to $-60$ dBm. This is still $10$ dBm above the receiver sensitivity the cell radius will certainly by larger than 250m. It will be computed in section \ref{sec:cell_range} with the path loss model that has to be established.\\
 
-\subsection{Path loss model}
 The path loss of the channel $L(d)$ and the path loss that does not depend on the antennas $L_0(d)$ are defined (with every term in dB) as:
 
 
@@ -381,12 +402,12 @@ In which the parameters $L_0$ and $n$ must be found to fit the values of the sim
 
 \begin{align}
     \label{eq:path_loss_model}
-    L_0(d) = 51.2 + 16.2 \cdot log_{10} \left(\frac{d}{1\text{m}}\right)
+    L_0(d) = 51.03 + 16.3 \cdot log_{10} \left(\frac{d}{1\text{m}}\right)
     \qquad
     \text{implying} \qquad \left\{
     \begin{array}{l}
-        n = 1.62 \\
-        L_0(d_0) = 51.2
+        n = 1.63 \\
+        L_0(d_0) = 51.03
     \end{array}
     \right.
 \end{align}
@@ -398,15 +419,17 @@ In which the parameters $L_0$ and $n$ must be found to fit the values of the sim
     \label{fig:path_loss}
 \end{figure}
 
+\section{Model variability}
+
 As the LLS estimator only gives a "\textit{best fit}" to the data, there is still a parameter to define: the variability $\sigma_L$. It is the standard deviation of the path loss around the fitted model defined in \ref{eq:path_loss_model} and its value here is:
 
 \begin{equation*}
-    \sigma_L = 0.227 \quad \text{dB}
+    \sigma_L = 0.225 \quad \text{dB}
 \end{equation*}
 
 The measured path loss is smaller than the one given by the Friis formula. This is because the simulation computes multiple rays that will (in the area averaging operation \ref{eq:average_power}) add up to a larger power than in a single ray model. The path loss model is therefore indeed supposed to be smaller than the Friis formula. \\
 
-\subsection{Cell range}
+\section{Cell range}
 \label{sec:cell_range}
 The communication reliability can be found under the assumption that the power variations due to shadowing is log-normal distributed. In that case, the probability of a successful communication is given by:
 
@@ -421,14 +444,14 @@ The cell range can also be computed for each value of $P_{\text{success}}$ using
 \begin{align*}
     L(d) &= P_{\text{TX}} - P_{\text{RX}}\\
     L_0(d_\text{max}) &= P_{\text{TX}} - P_{RX, \text{min}} + G_{\text{TX}} + G_{\text{RX}}\\
-    51.2 + 16.2 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= P_{\text{TX}} - P_{RX, \text{min}} + G_{\text{TX}} + G_{\text{RX}}
+    51.0 + 16.3 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= P_{\text{TX}} - P_{RX, \text{min}} + G_{\text{TX}} + G_{\text{RX}}
 \end{align*}
 
 The minimal received power $P_{RX, \text{min}}$ is the receiver sensitivity to which the fade margin is added. Putting the values of the left parameters in the equation gives:
 
 \begin{align*}
-    51.2 + 16.2 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= 20 - (-70 + M) + 2 \times 10 \log_{10} \left(\frac{16}{3\pi}\right)\\
-    \log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= \frac{43.4 - M}{16.1}\\
+    51.0 + 16.3 \cdot log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= 20 - (-70 + M) + 2 \times 10 \log_{10} \left(\frac{16}{3\pi}\right)\\
+    \log_{10} \left(\frac{d_{\text{max}}}{1\text{m}}\right) &= \frac{43.6 - M}{16.3}\\
     d_{\text{max}} &= 10^{\frac{43.4 - M}{16.2}} \left[\text{m}\right]
 \end{align*}
 
@@ -437,9 +460,9 @@ The minimal received power $P_{RX, \text{min}}$ is the receiver sensitivity to w
     \begin{tabular}{|c c c|}
         \hline
         Communication reliability & Fade margin (dB) & Cell radius (m) \\ \hline
-        50\% & 0 & 476.1 \\ \hline
-        95\% & 0.374 & 451.5 \\ \hline
-        99\% & 0.529 & 441.6 \\ \hline
+        50\% & 0 & 476.7 \\ \hline
+        95\% & 0.371 & 452.3 \\ \hline
+        99\% & 0.524 & 442.7 \\ \hline
     \end{tabular}
     \caption{Fade margins and cell radius for different communication reliability}
     \label{tab:fade_margins}
@@ -454,10 +477,14 @@ Because the error between the data and the fitted model is small (as proved both
     \label{fig:fade_margin}
 \end{figure}
 
-\section{LOS channel, wideband model}
+
+
+
+
+\chapter{LOS channel, wideband analysis}
 \label{sec:LOS_channel_wideband}
 
-\subsection{Impulse response and transfer function}
+\section{Impulse response and transfer function}
 For the wideband model and if there is only a single ray, the impulse response of the channel is given by:
 
 \begin{equation*}
@@ -482,7 +509,7 @@ The impulse response and the corresponding transfer function (computed by taking
 
 The impulse response is a single peak at a time corresponding to the time of flight of the LOS ray. The transfer function has a constant value over the frequency spectrum. This means that there is no frequency selectivity for a single ray, a result easily understandable as no frequency is less attenuated than another in free space. This is of course valid only because some assumptions have been made: there is no multipath propagation and no parasitic effects (gaseous absorption, rain attenuation, tropospheric scintillation, etc.).\smallskip\\
 
-\subsection{Tapped delay line model}
+\section{Tapped delay line model}
 Because of the limited bandwidth of the channel, the tapped delay line model is used to compute $h_{\text{TDL}}(t)$. The previous impulse response did not take into the fact that the receiver is only able to sample at the time resolution of the system $\Delta\tau = \frac{1}{B}$, where B is its bandwidth. The TDL model is found by:
 
 \begin{equation}
@@ -526,25 +553,31 @@ The tapped delay line impulse response $h_{\text{TDL}}(t)$ is shown on figure \r
     \label{fig:h_TDL_LOS}
 \end{figure}
 
-\section{Full channel, wideband model}
+\chapter{Full channel, wideband model}
+\section{Impulse response}
+This section do the same analysis as the previous one but for multiple rays. The impulse response is shown in figure \ref{fig:impulse_response_full}. \\
 
-This section will do the same analysis as the previous one but for multiple rays. The impulse response and the corresponding transfer function are shown in figure \ref{fig:impulse_response_full} and \ref{fig:transfer_function_full}. \\
-The impulse response plot is zoomed in so the different peaks are visible. Because of the multiple peaks, interference will occur between the rays, causing some frequencies to be more attenuated than others during their propagation through the channel. This is the reason why the transfer function is not constant anymore. \\
-The transfer function plot is also only partially shown in order to focus around the carrier frequency $f_c = 5.9$GHz. This analysis shows that this choice for $f_c$ is not optimal as the amplitude of $H(f)$ is low around this frequency. A wiser choice would have been to choose a frequency around $f_c = 5.95$GHz, which has more than twice the amplitude, resulting in needing four times less power to transmit. This is of course only true for the simulated environment (so for a distance of 500m between the transmitter and receiver) and it makes the choice for an optimal carrier frequency difficult. \\
-
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{5_1.eps}
     \caption{Impulse response of the wideband channel with multiple rays for a transmitter and receiver separated by 500m}
     \label{fig:impulse_response_full}
 \end{figure}
 
-\begin{figure}
+The impulse response plot is zoomed in so the different peaks are visible. Because of the multiple peaks, interference will occur between the rays, causing some frequencies to be more attenuated than others during their propagation through the channel. This is the reason why the transfer function will not be constant anymore. \\
+
+\section{Transfer function}
+
+The transfer function plot is also only partially shown in order to focus around the carrier frequency $f_c = 5.9$GHz. This analysis shows that this choice for $f_c$ is not optimal as the amplitude of $H(f)$ is low around this frequency. A wiser choice would have been to choose a frequency around $f_c = 5.95$GHz, which has more than twice the amplitude, resulting in needing four times less power to transmit. This is of course only true for the simulated environment (so for a distance of 500m between the transmitter and receiver) and it makes the choice for an optimal carrier frequency difficult. \\
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{5_2.eps}
     \caption{Transfer function of the wideband channel with multiple rays for a transmitter and receiver separated by 500m}
     \label{fig:transfer_function_full}
 \end{figure}
+
+\section{Tapped delay line model}
 
 The impulse response of the tapped delay line model is computed using the same method as in section \ref{sec:LOS_channel_wideband}. First, $h_l(t)$ is computed using equation \ref{eq:h_l} and then the TDL impulse response is computed using equation \ref{eq:h_TDL}. The result is shown in figure \ref{fig:impulse_response_TDL}. The difference with the previous impulse response is that some peaks now arrive in the same time bin. This means that the receiver will not be able to distinguish between them and they will interfere with each other. 
 
@@ -558,9 +591,63 @@ The impulse response of the tapped delay line model is computed using the same m
 
 
 \chapter{Further analysis}
-\section{Description}
+\section{Power Delay Profile}
+\subsection{Description}
+The power delay profile (PDP or $P(\tau)$) is defined as the expected power of the channel in every bin in the wideband model. As there is an expected value in its mathematical definition (see \ref{eq:pdp}), $h_l$ must be computed using equation \ref{eq:h_l} for a lot of different realizations of the channel. This has been done by placing the receiver at every possible position on the road (spaced by $5m$, as for the average power).
+
+\begin{equation}
+    P(\tau) = \sum_{l=0}^{L}\mathbb{E}\left[\left|h_{l}\right|^2\right] \delta(\tau - l\Delta\tau)
+    \label{eq:pdp}
+\end{equation}
+
+\subsection{PDP result}
+
+The PDP is shown in figure \ref{fig:pdp} and has been computed using equation \ref{eq:pdp}. It is limited to $1\mu s$ to have a better view of the peaks. It allows already to see a trend of the power to decrease with the bin index. This is due to the fact that the rays that are arriving later are traveling longer distances and are therefore more attenuated.\\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{6_0.eps}
+    \caption{Power delay profile of the channel with at most 3 bounces}
+    \label{fig:pdp}
+\end{figure}
+
+A few parameters can be extracted from the PDP. The first one is the total power $P$ which is defined as:
+
+\vspace{-0.8cm}
+\begin{align*}
+    P &= \int_{0}^{+\infty} P(\tau) d\tau\\
+    &= -3.41 \text{dBm}
+\end{align*}
+\vspace{-1cm}
+
+The total power allows to compute the mean delay $\tau_m$:
+
+\vspace{-0.8cm}
+\begin{align*}
+    \tau_m &= \frac{1}{P} \int_{0}^{+\infty} \tau P(\tau)  d\tau\\
+    &= 0.11 \mu s
+\end{align*}
+\vspace{-1cm}
+
+The mean delay is the time at which the power of the channel is maximal. It is short as the power at low delays is very high (let's not forget that \ref{fig:pdp} is in dBm).\\
+The last parameter is the delay spread $\sigma_{\tau}$, which is defined as follows:
+
+\vspace{-0.8cm}
+\begin{align*}
+    \sigma_{\tau} &= \sqrt{\frac{1}{P} \int_{0}^{+\infty} \tau^2 P(\tau) d\tau - \tau_m^2}\\
+    &= 0.31 \mu s
+\end{align*}
+\vspace{-1cm}
+
+This parameter is a measure of the dispersion of the rays. The larger it is, the more the rays are spread in time and the more difficult it will be to decode the signal. This is because the receiver will not be able to distinguish between two rays that arrive at different times but are close enough to be in the same time bin. \\
+The relatively low delay spread in this case is due to the fact that each ray follows a path that is close to the one of the other rays. As their traveling distance is similar, they arrive at the receiver at a similar time and the delay spread is small. \\
+
+\section{Different geometry}
+
+\subsection{Description}
+
 This section will analyze what happens when cars on perpendicular roads try to communicate with each other. The transmission cofficient of the rays that pass through buildings is supposed to be close to zero. Because of this, a lot of rays are removed and there is a need for a higher number of bounces. \\
-\section{Power analysis}
+\subsection{Power analysis}
 The power analysis is done the same way as in section \ref{sec:power_analysis} but with a different setup. The 3D plot \ref{fig:3D_2} shows the average power received in local areas of 5m. with the transmitting car placed at 25m from the intersection center.
 
 \begin{figure}
@@ -596,7 +683,7 @@ Comparing those two groups with the Friis model, it can be seen that the perpend
     \label{fig:path_loss_2}
 \end{figure}
 
-\section{Communication reliability}
+\subsection{Communication reliability}
 
 The change in the model implies that the cell radius must be recomputed. A table with the fade margins and the cell radius is shown below. Because the variability is much higher, the range of the cell radius is rapidly decreasing when the required communication reliability increases. \\
 
@@ -614,7 +701,7 @@ The change in the model implies that the cell radius must be recomputed. A table
 \end{table}
 
 Note that in such a case, the cell radius is not a good indicator of the range of the car. One can indeed see that a 99\% communication reliability is only possible for a car placed at less than 10m from the emitter but at such distances, there cannot be a wall between the two cars and the situation is identical to the one in section \ref{sec:power_analysis}. \\
-A more realistic number is the one for 50\% communication reliability. The computed distance of 90m shows that the intersection has indeed a negative effect on the range. There is division by four of the cell radius, which corresponds to the need for 16 times more power at the emitter antenna to achieve the same range, as proved by \ref{eq:power_friis_simplified} in the first chapter. \\
+A more realistic number is the one for 50\% communication reliability. The computed distance of 90m shows that the intersection has indeed a negative effect on the range. There is division by a factor $5$ of the cell radius, which corresponds to the need for 25 times more power at the emitter antenna to achieve the same range, as proved by \ref{eq:power_friis_simplified} in the first chapter. \\
 
 %\printglossary
 
