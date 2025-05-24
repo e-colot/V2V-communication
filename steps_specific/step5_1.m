@@ -30,7 +30,7 @@ disp(['Coherence bandwidth: ' num2str(round(deltaFc / 1e6)) ' MHz']);
 disp(['RF bandwidth: ' num2str(round(cfg.transmit_params.BW / 1e6)) ' MHz']);
 
 % construction of h(t)
-T = 15e-6; % time window
+T = 5e-6; % time window
 t = 0:1e-11:T;
 h = zeros(1, length(t));
 for i = 1:length(alpha)

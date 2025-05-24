@@ -174,12 +174,15 @@ Where $d_1$ is the distance of propagation and $\tau_1$ he propagation delay of 
 The transfer function $H(f)$ of the channel is found by taking the Fourier transform of $h(\tau)$
 \vspace{-1cm}
 
-\begin{align*}
+\begin{align}
+    \nonumber
     H(f) &= \int_{-\infty}^{\infty} h(\tau) e^{-j2\pi f \tau} d\tau\\
+    \nonumber
     &= \alpha_1\frac{e^{-j\frac{2\pi f_c d_1}{c}}}{d_1}e^{-j2\pi f \frac{d_1}{c}}\\
-    &= \alpha_1\frac{e^{-j \frac{2\pi (f+f_c)d_1}{c}}}{d_1}\\
-\end{align*}
-\vspace{-2.5cm}
+    \label{eq:transfer_function}
+    &= \alpha_1\frac{e^{-j \frac{2\pi (f+f_c)d_1}{c}}}{d_1}
+\end{align}
+\vspace{-1.5cm}
 
 \section{Narrowband channel}
 
@@ -567,6 +570,7 @@ This section do the same analysis as the previous one but for multiple rays. The
 The impulse response plot is zoomed in so the different peaks are visible. Because of the multiple peaks, interference will occur between the rays, causing some frequencies to be more attenuated than others during their propagation through the channel. This is the reason why the transfer function will not be constant anymore. \\
 
 \section{Transfer function}
+\label{sec:transfer_function}
 
 The transfer function plot is also only partially shown in order to focus around the carrier frequency $f_c = 5.9$GHz. This analysis shows that this choice for $f_c$ is not optimal as the amplitude of $H(f)$ is low around this frequency. A wiser choice would have been to choose a frequency around $f_c = 5.95$GHz, which has more than twice the amplitude, resulting in needing four times less power to transmit. This is of course only true for the simulated environment (so for a distance of 500m between the transmitter and receiver) and it makes the choice for an optimal carrier frequency difficult. \\
 
@@ -702,6 +706,53 @@ The change in the model implies that the cell radius must be recomputed. A table
 
 Note that in such a case, the cell radius is not a good indicator of the range of the car. One can indeed see that a 99\% communication reliability is only possible for a car placed at less than 10m from the emitter but at such distances, there cannot be a wall between the two cars and the situation is identical to the one in section \ref{sec:power_analysis}. \\
 A more realistic number is the one for 50\% communication reliability. The computed distance of 90m shows that the intersection has indeed a negative effect on the range. There is division by a factor $5$ of the cell radius, which corresponds to the need for 25 times more power at the emitter antenna to achieve the same range, as proved by \ref{eq:power_friis_simplified} in the first chapter. \\
+
+\section{Optimal carrier frequency}
+In section \ref{sec:transfer_function}, it was shown that the transfer function is not constant and that some frequencies are more attenuated than others. A frequency was pointed to be less attenuated than $5.9$ GHz but as the analysis was done for a distance of 500m, the conclusion was that this frequency might not be optimal for other distances. \\
+The objective of this section is to find the optimal carrier frequency over all the distances. The analysis is done by computing the transfer function for every distance between 0 and 1000m. The frequencies are limited between $5.5$ and $6.5$ GHz to have a better view of the results. The amplitude of the transfer function in dB is shown in figure \ref{fig:transfer_function_2}.\\
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{6_3.eps}
+    \caption{Transfer function of the wideband channel with multiple rays for a varying distance}
+    \label{fig:transfer_function_2}
+\end{figure}
+
+It is difficult to see the optimal frequency on this plot so the mean of the transfer function over the distance is computed and shown in figure \ref{fig:optimal_frequency}. The optimal frequency is the one that has the highest mean amplitude.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{6_4.eps}
+    \caption{Mean transfer function of the wideband channel with multiple rays for a varying distance}
+    \label{fig:optimal_frequency}
+\end{figure}
+
+Choosing the optimal frequency is not an easy task\footnote{The regulations must also be taken into account but this is neglected here as only the physics is discussed} and taking the highest mean amplitude is a simplistic method. It gave as optimal frequency:
+\begin{equation*}
+    f_{\text{opt, mean}} = 5.987 \text{GHz}
+\end{equation*}
+
+A more advanced method is proposed next and it consists of a 4-step process:\\
+First, the transfer function is corrected to take the attenuation due to the distance into account. From equation \ref{eq:transfer_function}, the transfer function is inversely proportional to the distance. The correction is done by multiplying the transfer function by $d$ and the result is shown in figure \ref{fig:transfer_function_corrected}. This allows each distance to have the same weight in the computation of the optimal frequency.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{6_5.eps}
+    \caption{Transfer function of the wideband channel with multiple rays for a varying distance, corrected for the distance attenuation, which makes the transfer function flatter over the distances}
+    \label{fig:transfer_function_corrected}
+\end{figure}
+
+Second, the minimum of the transfer function is computed across all frequencies, and only the frequencies with values in the top 10\% of that range are retained.\\
+
+Third, to avoid having a channel that has has an attenuation that changes too much with the distance, the standard deviation of the transfer function is computed for each remaining frequency and the frequencies with a standard deviation in the top 90\% are removed.\\
+
+Finally, the one with the highest maximal value is chosen as the optimal frequency. This gives:
+\begin{equation*}
+    f_{\text{opt, combination}} = 5.819 \text{GHz}
+\end{equation*}
+
+This method is more complex but it allows to have a result that takes more parameters into account. If the carrier frequency was a free parameter, this would be the one to choose according to these criterions. \\
+
 
 %\printglossary
 
